@@ -1,0 +1,451 @@
+/home/khlu/miniconda3/envs/omni/lib/python3.10/site-packages/_distutils_hack/__init__.py:53: UserWarning: Reliance on distutils from stdlib is deprecated. Users must rely on setuptools to provide the distutils module. Avoid importing distutils or import setuptools first, and avoid setting SETUPTOOLS_USE_DISTUTILS=stdlib. Register concerns at https://github.com/pypa/setuptools/issues/new?template=distutils-deprecation.yml
+  warnings.warn(
+[methods] loading Qwen/Qwen2.5-Omni-7B
+You have video processor config saved in `preprocessor.json` file which is deprecated. Video processor configs should be saved in their own `video_preprocessor.json` file. You can rename the file or load and save the processor back which renames it automatically. Loading from `preprocessor.json` will be removed in v5.0.
+Unrecognized keys in `rope_scaling` for 'rope_type'='default': {'mrope_section'}
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:02<00:10,  2.53s/it]Loading checkpoint shards:  40%|████      | 2/5 [00:04<00:05,  1.94s/it]Loading checkpoint shards:  60%|██████    | 3/5 [00:05<00:03,  1.65s/it]Loading checkpoint shards:  80%|████████  | 4/5 [00:06<00:01,  1.37s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:06<00:00,  1.07it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:06<00:00,  1.29s/it]
+[methods] 300 clips | methods=['content', 'snr', 'tvar', 'meanplustvar', 'content_ln'] Ks=[50, 200] alphas=[8.0, 16.0]
+  0%|          | 0/300 [00:00<?, ?it/s]  0%|          | 1/300 [00:41<3:27:27, 41.63s/it]  1%|          | 2/300 [01:04<2:31:35, 30.52s/it]  1%|          | 3/300 [01:21<1:59:52, 24.22s/it]  1%|▏         | 4/300 [01:45<1:59:43, 24.27s/it]  2%|▏         | 5/300 [02:13<2:06:16, 25.68s/it]  2%|▏         | 6/300 [02:35<1:59:38, 24.42s/it]  2%|▏         | 7/300 [03:25<2:40:35, 32.88s/it]  3%|▎         | 8/300 [03:44<2:17:09, 28.18s/it]  3%|▎         | 9/300 [04:20<2:28:56, 30.71s/it]  3%|▎         | 10/300 [04:46<2:21:22, 29.25s/it]  4%|▎         | 11/300 [05:04<2:03:57, 25.74s/it]  4%|▍         | 12/300 [05:59<2:47:06, 34.81s/it]  4%|▍         | 13/300 [06:26<2:35:16, 32.46s/it]  5%|▍         | 14/300 [06:55<2:29:32, 31.37s/it]  5%|▌         | 15/300 [07:08<2:02:04, 25.70s/it]  5%|▌         | 16/300 [07:34<2:02:11, 25.81s/it]  6%|▌         | 17/300 [07:50<1:47:55, 22.88s/it]  6%|▌         | 18/300 [08:25<2:04:42, 26.53s/it]  6%|▋         | 19/300 [08:49<2:01:40, 25.98s/it]  7%|▋         | 20/300 [09:06<1:48:38, 23.28s/it]  7%|▋         | 21/300 [09:25<1:41:43, 21.88s/it]  7%|▋         | 22/300 [09:53<1:50:20, 23.82s/it]  8%|▊         | 23/300 [10:22<1:56:11, 25.17s/it]  8%|▊         | 24/300 [10:46<1:54:17, 24.85s/it]  8%|▊         | 25/300 [11:04<1:44:12, 22.74s/it]  9%|▊         | 26/300 [11:41<2:03:35, 27.06s/it]  9%|▉         | 27/300 [11:59<1:51:27, 24.50s/it]  9%|▉         | 28/300 [12:31<2:01:04, 26.71s/it] 10%|▉         | 29/300 [12:44<1:41:11, 22.40s/it] 10%|█         | 30/300 [13:01<1:34:30, 21.00s/it] 10%|█         | 31/300 [13:13<1:21:48, 18.25s/it] 11%|█         | 32/300 [13:31<1:21:35, 18.27s/it] 11%|█         | 33/300 [13:51<1:22:26, 18.53s/it] 11%|█▏        | 34/300 [14:13<1:26:53, 19.60s/it] 12%|█▏        | 35/300 [14:24<1:16:10, 17.25s/it] 12%|█▏        | 36/300 [14:46<1:21:11, 18.45s/it] 12%|█▏        | 37/300 [15:05<1:22:40, 18.86s/it] 13%|█▎        | 38/300 [15:19<1:16:02, 17.41s/it] 13%|█▎        | 39/300 [15:39<1:19:01, 18.17s/it] 13%|█▎        | 40/300 [15:58<1:19:24, 18.32s/it] 14%|█▎        | 41/300 [16:16<1:18:48, 18.26s/it] 14%|█▍        | 42/300 [16:36<1:20:27, 18.71s/it] 14%|█▍        | 43/300 [16:49<1:13:10, 17.08s/it] 15%|█▍        | 44/300 [17:02<1:07:47, 15.89s/it] 15%|█▌        | 45/300 [17:22<1:12:57, 17.17s/it] 15%|█▌        | 46/300 [17:36<1:07:51, 16.03s/it] 16%|█▌        | 47/300 [17:58<1:15:19, 17.86s/it] 16%|█▌        | 48/300 [18:21<1:21:16, 19.35s/it] 16%|█▋        | 49/300 [18:43<1:24:39, 20.24s/it] 17%|█▋        | 50/300 [18:58<1:17:51, 18.69s/it] 17%|█▋        | 51/300 [19:09<1:07:55, 16.37s/it] 17%|█▋        | 52/300 [19:25<1:07:30, 16.33s/it] 18%|█▊        | 53/300 [19:40<1:04:33, 15.68s/it] 18%|█▊        | 54/300 [19:53<1:01:38, 15.03s/it] 18%|█▊        | 55/300 [20:10<1:03:38, 15.59s/it] 19%|█▊        | 56/300 [20:28<1:06:47, 16.42s/it] 19%|█▉        | 57/300 [20:48<1:09:54, 17.26s/it] 19%|█▉        | 58/300 [21:07<1:11:41, 17.78s/it] 20%|█▉        | 59/300 [21:24<1:11:33, 17.81s/it] 20%|██        | 60/300 [21:43<1:11:53, 17.97s/it] 20%|██        | 61/300 [22:00<1:10:16, 17.64s/it] 21%|██        | 62/300 [22:22<1:15:16, 18.98s/it] 21%|██        | 63/300 [22:42<1:16:12, 19.29s/it] 21%|██▏       | 64/300 [22:59<1:13:27, 18.68s/it] 22%|██▏       | 65/300 [23:14<1:08:42, 17.54s/it] 22%|██▏       | 66/300 [23:39<1:16:54, 19.72s/it] 22%|██▏       | 67/300 [23:54<1:11:45, 18.48s/it] 23%|██▎       | 68/300 [24:12<1:10:32, 18.24s/it] 23%|██▎       | 69/300 [24:30<1:09:29, 18.05s/it] 23%|██▎       | 70/300 [24:45<1:06:35, 17.37s/it] 24%|██▎       | 71/300 [25:01<1:04:33, 16.92s/it] 24%|██▍       | 72/300 [25:20<1:06:40, 17.54s/it] 24%|██▍       | 73/300 [25:46<1:15:35, 19.98s/it] 25%|██▍       | 74/300 [26:08<1:17:18, 20.52s/it] 25%|██▌       | 75/300 [26:25<1:12:48, 19.42s/it] 25%|██▌       | 76/300 [26:46<1:14:49, 20.04s/it] 26%|██▌       | 77/300 [27:05<1:12:46, 19.58s/it] 26%|██▌       | 78/300 [27:20<1:08:15, 18.45s/it] 26%|██▋       | 79/300 [27:44<1:13:26, 19.94s/it] 27%|██▋       | 80/300 [28:01<1:09:47, 19.04s/it] 27%|██▋       | 81/300 [28:19<1:08:29, 18.76s/it] 27%|██▋       | 82/300 [28:38<1:08:34, 18.88s/it] 28%|██▊       | 83/300 [28:55<1:05:51, 18.21s/it] 28%|██▊       | 84/300 [29:17<1:10:03, 19.46s/it] 28%|██▊       | 85/300 [29:36<1:09:12, 19.31s/it] 29%|██▊       | 86/300 [29:52<1:05:05, 18.25s/it] 29%|██▉       | 87/300 [30:11<1:05:29, 18.45s/it] 29%|██▉       | 88/300 [30:33<1:09:25, 19.65s/it] 30%|██▉       | 89/300 [30:51<1:06:55, 19.03s/it] 30%|███       | 90/300 [31:12<1:09:16, 19.79s/it] 30%|███       | 91/300 [31:48<1:25:07, 24.44s/it] 31%|███       | 92/300 [32:19<1:32:11, 26.59s/it] 31%|███       | 93/300 [32:43<1:29:00, 25.80s/it] 31%|███▏      | 94/300 [33:18<1:37:36, 28.43s/it] 32%|███▏      | 95/300 [33:52<1:43:22, 30.26s/it] 32%|███▏      | 96/300 [34:18<1:38:16, 28.91s/it] 32%|███▏      | 97/300 [34:45<1:35:53, 28.34s/it] 33%|███▎      | 98/300 [35:13<1:35:09, 28.26s/it] 33%|███▎      | 99/300 [35:37<1:30:06, 26.90s/it] 33%|███▎      | 100/300 [36:05<1:30:45, 27.23s/it] 34%|███▎      | 101/300 [36:28<1:26:07, 25.97s/it] 34%|███▍      | 102/300 [36:53<1:25:25, 25.89s/it] 34%|███▍      | 103/300 [37:16<1:21:40, 24.88s/it] 35%|███▍      | 104/300 [37:39<1:19:24, 24.31s/it] 35%|███▌      | 105/300 [38:02<1:17:53, 23.97s/it] 35%|███▌      | 106/300 [38:23<1:14:16, 22.97s/it] 36%|███▌      | 107/300 [38:45<1:13:31, 22.86s/it] 36%|███▌      | 108/300 [39:11<1:16:00, 23.75s/it] 36%|███▋      | 109/300 [39:38<1:18:29, 24.65s/it] 37%|███▋      | 110/300 [40:01<1:16:48, 24.26s/it] 37%|███▋      | 111/300 [40:19<1:10:03, 22.24s/it] 37%|███▋      | 112/300 [40:41<1:09:24, 22.15s/it] 38%|███▊      | 113/300 [41:06<1:11:57, 23.09s/it] 38%|███▊      | 114/300 [41:30<1:12:21, 23.34s/it] 38%|███▊      | 115/300 [41:43<1:02:14, 20.18s/it] 39%|███▊      | 116/300 [42:08<1:06:13, 21.59s/it] 39%|███▉      | 117/300 [42:31<1:07:46, 22.22s/it] 39%|███▉      | 118/300 [42:51<1:05:01, 21.44s/it] 40%|███▉      | 119/300 [43:16<1:07:28, 22.37s/it] 40%|████      | 120/300 [43:40<1:09:26, 23.14s/it] 40%|████      | 121/300 [43:55<1:01:30, 20.62s/it] 41%|████      | 122/300 [44:21<1:05:23, 22.04s/it] 41%|████      | 123/300 [44:42<1:04:19, 21.81s/it] 41%|████▏     | 124/300 [45:02<1:02:39, 21.36s/it] 42%|████▏     | 125/300 [45:26<1:04:33, 22.13s/it] 42%|████▏     | 126/300 [45:47<1:02:59, 21.72s/it] 42%|████▏     | 127/300 [46:04<58:54, 20.43s/it]   43%|████▎     | 128/300 [46:27<1:00:38, 21.16s/it] 43%|████▎     | 129/300 [46:46<58:08, 20.40s/it]   43%|████▎     | 130/300 [47:10<1:01:23, 21.67s/it] 44%|████▎     | 131/300 [47:30<59:15, 21.04s/it]   44%|████▍     | 132/300 [47:54<1:01:22, 21.92s/it] 44%|████▍     | 133/300 [48:10<56:28, 20.29s/it]   45%|████▍     | 134/300 [48:32<56:48, 20.54s/it] 45%|████▌     | 135/300 [49:03<1:05:34, 23.84s/it] 45%|████▌     | 136/300 [49:25<1:03:18, 23.16s/it] 46%|████▌     | 137/300 [49:47<1:01:58, 22.81s/it] 46%|████▌     | 138/300 [50:06<58:41, 21.74s/it]   46%|████▋     | 139/300 [50:26<57:22, 21.38s/it] 47%|████▋     | 140/300 [50:49<57:37, 21.61s/it] 47%|████▋     | 141/300 [51:11<58:16, 21.99s/it] 47%|████▋     | 142/300 [51:33<57:11, 21.72s/it] 48%|████▊     | 143/300 [51:51<54:36, 20.87s/it] 48%|████▊     | 144/300 [52:06<49:33, 19.06s/it] 48%|████▊     | 145/300 [52:26<49:47, 19.28s/it] 49%|████▊     | 146/300 [52:50<52:50, 20.59s/it] 49%|████▉     | 147/300 [53:12<54:04, 21.21s/it] 49%|████▉     | 148/300 [53:35<54:30, 21.52s/it] 50%|████▉     | 149/300 [53:55<53:16, 21.17s/it] 50%|█████     | 150/300 [54:17<53:53, 21.56s/it] 50%|█████     | 151/300 [54:42<55:34, 22.38s/it] 51%|█████     | 152/300 [55:08<57:54, 23.48s/it] 51%|█████     | 153/300 [55:34<59:35, 24.32s/it] 51%|█████▏    | 154/300 [55:53<55:34, 22.84s/it] 52%|█████▏    | 155/300 [56:11<51:40, 21.39s/it] 52%|█████▏    | 156/300 [56:30<49:13, 20.51s/it] 52%|█████▏    | 157/300 [56:55<52:02, 21.83s/it] 53%|█████▎    | 158/300 [57:15<50:24, 21.30s/it] 53%|█████▎    | 159/300 [57:38<51:08, 21.77s/it] 53%|█████▎    | 160/300 [58:02<52:15, 22.40s/it] 54%|█████▎    | 161/300 [58:15<45:54, 19.82s/it] 54%|█████▍    | 162/300 [58:40<48:51, 21.24s/it] 54%|█████▍    | 163/300 [58:54<43:39, 19.12s/it] 55%|█████▍    | 164/300 [59:09<40:47, 18.00s/it] 55%|█████▌    | 165/300 [59:32<43:25, 19.30s/it] 55%|█████▌    | 166/300 [59:57<46:48, 20.96s/it] 56%|█████▌    | 167/300 [1:00:21<48:52, 22.05s/it] 56%|█████▌    | 168/300 [1:00:40<46:18, 21.05s/it] 56%|█████▋    | 169/300 [1:01:05<48:23, 22.16s/it] 57%|█████▋    | 170/300 [1:01:22<44:57, 20.75s/it] 57%|█████▋    | 171/300 [1:01:45<45:44, 21.28s/it] 57%|█████▋    | 172/300 [1:02:04<44:24, 20.82s/it] 58%|█████▊    | 173/300 [1:02:29<46:38, 22.03s/it] 58%|█████▊    | 174/300 [1:02:51<45:56, 21.88s/it] 58%|█████▊    | 175/300 [1:03:15<47:02, 22.58s/it] 59%|█████▊    | 176/300 [1:03:43<49:42, 24.05s/it] 59%|█████▉    | 177/300 [1:04:08<49:53, 24.34s/it] 59%|█████▉    | 178/300 [1:04:26<45:39, 22.46s/it] 60%|█████▉    | 179/300 [1:04:50<46:26, 23.03s/it] 60%|██████    | 180/300 [1:05:11<44:37, 22.31s/it] 60%|██████    | 181/300 [1:05:34<44:56, 22.66s/it] 61%|██████    | 182/300 [1:06:00<46:45, 23.77s/it] 61%|██████    | 183/300 [1:06:22<44:57, 23.05s/it] 61%|██████▏   | 184/300 [1:06:37<40:01, 20.70s/it] 62%|██████▏   | 185/300 [1:06:53<37:08, 19.38s/it] 62%|██████▏   | 186/300 [1:07:16<38:42, 20.37s/it] 62%|██████▏   | 187/300 [1:07:39<39:39, 21.06s/it] 63%|██████▎   | 188/300 [1:07:59<39:06, 20.95s/it] 63%|██████▎   | 189/300 [1:08:23<40:01, 21.64s/it] 63%|██████▎   | 190/300 [1:08:37<35:54, 19.59s/it] 64%|██████▎   | 191/300 [1:08:53<33:15, 18.31s/it] 64%|██████▍   | 192/300 [1:09:14<34:25, 19.12s/it] 64%|██████▍   | 193/300 [1:09:28<31:27, 17.64s/it] 65%|██████▍   | 194/300 [1:09:52<34:49, 19.71s/it] 65%|██████▌   | 195/300 [1:10:16<36:40, 20.96s/it] 65%|██████▌   | 196/300 [1:10:40<37:55, 21.88s/it] 66%|██████▌   | 197/300 [1:11:02<37:29, 21.84s/it] 66%|██████▌   | 198/300 [1:11:28<38:59, 22.93s/it] 66%|██████▋   | 199/300 [1:11:53<39:47, 23.64s/it] 67%|██████▋   | 200/300 [1:12:18<39:53, 23.93s/it] 67%|██████▋   | 201/300 [1:12:42<39:48, 24.13s/it] 67%|██████▋   | 202/300 [1:13:08<40:06, 24.55s/it] 68%|██████▊   | 203/300 [1:13:30<38:51, 24.04s/it] 68%|██████▊   | 204/300 [1:13:55<38:44, 24.21s/it] 68%|██████▊   | 205/300 [1:14:19<38:19, 24.21s/it] 69%|██████▊   | 206/300 [1:14:36<34:15, 21.86s/it] 69%|██████▉   | 207/300 [1:14:56<33:11, 21.41s/it] 69%|██████▉   | 208/300 [1:15:18<33:18, 21.72s/it] 70%|██████▉   | 209/300 [1:15:41<33:25, 22.03s/it] 70%|███████   | 210/300 [1:16:06<34:18, 22.87s/it] 70%|███████   | 211/300 [1:16:25<32:17, 21.77s/it] 71%|███████   | 212/300 [1:16:44<30:27, 20.76s/it] 71%|███████   | 213/300 [1:17:04<29:53, 20.62s/it] 71%|███████▏  | 214/300 [1:17:24<29:13, 20.39s/it] 72%|███████▏  | 215/300 [1:17:37<25:57, 18.32s/it] 72%|███████▏  | 216/300 [1:17:54<25:03, 17.89s/it] 72%|███████▏  | 217/300 [1:18:07<22:48, 16.49s/it] 73%|███████▎  | 218/300 [1:18:21<21:08, 15.47s/it] 73%|███████▎  | 219/300 [1:18:42<23:13, 17.20s/it] 73%|███████▎  | 220/300 [1:18:56<21:38, 16.23s/it] 74%|███████▎  | 221/300 [1:19:15<22:45, 17.28s/it] 74%|███████▍  | 222/300 [1:19:32<22:21, 17.20s/it] 74%|███████▍  | 223/300 [1:19:42<19:12, 14.96s/it] 75%|███████▍  | 224/300 [1:19:56<18:41, 14.76s/it] 75%|███████▌  | 225/300 [1:20:15<19:57, 15.96s/it] 75%|███████▌  | 226/300 [1:20:35<21:07, 17.13s/it] 76%|███████▌  | 227/300 [1:20:43<17:28, 14.37s/it] 76%|███████▌  | 228/300 [1:20:57<17:08, 14.28s/it] 76%|███████▋  | 229/300 [1:21:13<17:34, 14.85s/it] 77%|███████▋  | 230/300 [1:21:23<15:31, 13.30s/it] 77%|███████▋  | 231/300 [1:21:43<17:31, 15.24s/it] 77%|███████▋  | 232/300 [1:21:52<15:05, 13.32s/it] 78%|███████▊  | 233/300 [1:22:11<17:03, 15.28s/it] 78%|███████▊  | 234/300 [1:22:30<17:51, 16.24s/it] 78%|███████▊  | 235/300 [1:22:52<19:24, 17.92s/it] 79%|███████▊  | 236/300 [1:23:10<19:03, 17.87s/it] 79%|███████▉  | 237/300 [1:23:27<18:44, 17.85s/it] 79%|███████▉  | 238/300 [1:23:47<18:54, 18.30s/it] 80%|███████▉  | 239/300 [1:24:04<18:25, 18.12s/it] 80%|████████  | 240/300 [1:24:26<19:03, 19.06s/it] 80%|████████  | 241/300 [1:25:00<23:15, 23.65s/it] 81%|████████  | 242/300 [1:25:22<22:29, 23.26s/it] 81%|████████  | 243/300 [1:25:46<22:12, 23.38s/it] 81%|████████▏ | 244/300 [1:26:11<22:13, 23.82s/it] 82%|████████▏ | 245/300 [1:26:38<22:46, 24.84s/it] 82%|████████▏ | 246/300 [1:27:04<22:39, 25.18s/it] 82%|████████▏ | 247/300 [1:27:24<20:45, 23.50s/it] 83%|████████▎ | 248/300 [1:27:49<20:52, 24.09s/it] 83%|████████▎ | 249/300 [1:28:12<20:15, 23.83s/it] 83%|████████▎ | 250/300 [1:28:34<19:22, 23.25s/it] 84%|████████▎ | 251/300 [1:29:01<19:47, 24.23s/it] 84%|████████▍ | 252/300 [1:29:31<20:48, 26.02s/it] 84%|████████▍ | 253/300 [1:29:52<19:18, 24.64s/it] 85%|████████▍ | 254/300 [1:30:19<19:19, 25.21s/it] 85%|████████▌ | 255/300 [1:30:45<19:02, 25.39s/it] 85%|████████▌ | 256/300 [1:31:10<18:35, 25.34s/it] 86%|████████▌ | 257/300 [1:31:34<17:55, 25.00s/it] 86%|████████▌ | 258/300 [1:32:02<18:01, 25.76s/it] 86%|████████▋ | 259/300 [1:32:27<17:25, 25.49s/it] 87%|████████▋ | 260/300 [1:32:59<18:28, 27.71s/it] 87%|████████▋ | 261/300 [1:33:23<17:08, 26.38s/it] 87%|████████▋ | 262/300 [1:33:57<18:12, 28.75s/it] 88%|████████▊ | 263/300 [1:34:25<17:30, 28.39s/it] 88%|████████▊ | 264/300 [1:34:47<15:56, 26.57s/it] 88%|████████▊ | 265/300 [1:35:15<15:46, 27.05s/it] 89%|████████▊ | 266/300 [1:35:41<15:08, 26.71s/it] 89%|████████▉ | 267/300 [1:36:04<14:00, 25.48s/it] 89%|████████▉ | 268/300 [1:36:30<13:43, 25.73s/it] 90%|████████▉ | 269/300 [1:37:02<14:20, 27.75s/it] 90%|█████████ | 270/300 [1:37:28<13:35, 27.17s/it] 90%|█████████ | 271/300 [1:37:38<10:38, 22.01s/it] 91%|█████████ | 272/300 [1:37:48<08:32, 18.29s/it] 91%|█████████ | 273/300 [1:38:09<08:40, 19.28s/it] 91%|█████████▏| 274/300 [1:38:26<08:03, 18.60s/it] 92%|█████████▏| 275/300 [1:38:36<06:37, 15.89s/it] 92%|█████████▏| 276/300 [1:39:01<07:28, 18.70s/it] 92%|█████████▏| 277/300 [1:39:20<07:11, 18.77s/it] 93%|█████████▎| 278/300 [1:39:29<05:48, 15.84s/it] 93%|█████████▎| 279/300 [1:39:46<05:38, 16.12s/it] 93%|█████████▎| 280/300 [1:40:00<05:10, 15.52s/it] 94%|█████████▎| 281/300 [1:40:16<05:00, 15.80s/it] 94%|█████████▍| 282/300 [1:40:27<04:16, 14.23s/it] 94%|█████████▍| 283/300 [1:40:36<03:34, 12.59s/it] 95%|█████████▍| 284/300 [1:40:52<03:39, 13.70s/it] 95%|█████████▌| 285/300 [1:41:04<03:19, 13.29s/it] 95%|█████████▌| 286/300 [1:41:20<03:15, 13.93s/it] 96%|█████████▌| 287/300 [1:41:41<03:30, 16.17s/it] 96%|█████████▌| 288/300 [1:41:51<02:52, 14.34s/it] 96%|█████████▋| 289/300 [1:42:09<02:47, 15.21s/it] 97%|█████████▋| 290/300 [1:42:19<02:16, 13.65s/it] 97%|█████████▋| 291/300 [1:42:37<02:14, 15.00s/it] 97%|█████████▋| 292/300 [1:42:46<01:47, 13.38s/it] 98%|█████████▊| 293/300 [1:43:08<01:50, 15.75s/it] 98%|█████████▊| 294/300 [1:43:22<01:31, 15.24s/it] 98%|█████████▊| 295/300 [1:43:42<01:24, 16.90s/it] 99%|█████████▊| 296/300 [1:44:00<01:08, 17.15s/it] 99%|█████████▉| 297/300 [1:44:10<00:45, 15.10s/it] 99%|█████████▉| 298/300 [1:44:24<00:29, 14.55s/it]100%|█████████▉| 299/300 [1:44:42<00:15, 15.66s/it]100%|██████████| 300/300 [1:45:02<00:00, 17.12s/it]100%|██████████| 300/300 [1:45:02<00:00, 21.01s/it]
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 3)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30     0.00%    86.67%
+emotion_recognition                 30     3.33%    63.33%
+gender_prediction                   30     3.33%    96.67%
+intonation_perception               30     0.00%   100.00%
+pitch_comparison                    30    10.00%    66.67%
+speaker_identity_recognition        30    33.33%    16.67%
+speed_comparison                    30    13.33%    83.33%
+total_speaker_counting              30     3.33%    93.33%
+vocal_range_comparison              30    10.00%    76.67%
+volume_comparison                   30    10.00%    76.67%
+----------------------------------------------------------
+Overall                            300     8.67%    76.00%
+
+[report] methods_exp/out/atier/report_baseline.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 3)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30    10.00%    66.67%
+emotion_recognition                 30     6.67%    60.00%
+gender_prediction                   30     6.67%    93.33%
+intonation_perception               30     3.33%    90.00%
+pitch_comparison                    30    13.33%    70.00%
+speaker_identity_recognition        30    26.67%    30.00%
+speed_comparison                    30     6.67%    73.33%
+total_speaker_counting              30    10.00%    86.67%
+vocal_range_comparison              30    13.33%    73.33%
+volume_comparison                   30    13.33%    63.33%
+----------------------------------------------------------
+Overall                            300    11.00%    70.67%
+
+[report] methods_exp/out/atier/report_content_K50_a8.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 13)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30    43.33%    16.67%
+emotion_recognition                 30    33.33%    23.33%
+gender_prediction                   30    50.00%    50.00%
+intonation_perception               30    50.00%    50.00%
+pitch_comparison                    30    26.67%    50.00%
+speaker_identity_recognition        30    36.67%    13.33%
+speed_comparison                    30    10.00%    63.33%
+total_speaker_counting              30    33.33%    56.67%
+vocal_range_comparison              30    20.00%    53.33%
+volume_comparison                   30     6.67%    76.67%
+----------------------------------------------------------
+Overall                            300    31.00%    45.33%
+
+[report] methods_exp/out/atier/report_content_K50_a16.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 0)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30    33.33%    36.67%
+emotion_recognition                 30    23.33%    53.33%
+gender_prediction                   30    23.33%    76.67%
+intonation_perception               30    50.00%    50.00%
+pitch_comparison                    30    23.33%    60.00%
+speaker_identity_recognition        30    26.67%    26.67%
+speed_comparison                    30     3.33%    80.00%
+total_speaker_counting              30    26.67%    66.67%
+vocal_range_comparison              30    13.33%    73.33%
+volume_comparison                   30    13.33%    66.67%
+----------------------------------------------------------
+Overall                            300    23.67%    59.00%
+
+[report] methods_exp/out/atier/report_content_K200_a8.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 5)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30    40.00%    16.67%
+emotion_recognition                 30    26.67%    43.33%
+gender_prediction                   30    56.67%    43.33%
+intonation_perception               30    50.00%    43.33%
+pitch_comparison                    30    26.67%    50.00%
+speaker_identity_recognition        30    40.00%    10.00%
+speed_comparison                    30     6.67%    73.33%
+total_speaker_counting              30    33.33%    56.67%
+vocal_range_comparison              30    10.00%    66.67%
+volume_comparison                   30     3.33%    76.67%
+----------------------------------------------------------
+Overall                            300    29.33%    48.00%
+
+[report] methods_exp/out/atier/report_content_K200_a16.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 4)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30     0.00%    90.00%
+emotion_recognition                 30     3.33%    63.33%
+gender_prediction                   30     3.33%    96.67%
+intonation_perception               30     0.00%   100.00%
+pitch_comparison                    30    10.00%    66.67%
+speaker_identity_recognition        30    40.00%    16.67%
+speed_comparison                    30    13.33%    83.33%
+total_speaker_counting              30     3.33%    93.33%
+vocal_range_comparison              30    10.00%    73.33%
+volume_comparison                   30     6.67%    80.00%
+----------------------------------------------------------
+Overall                            300     9.00%    76.33%
+
+[report] methods_exp/out/atier/report_snr_K50_a8.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 5)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30     0.00%    90.00%
+emotion_recognition                 30     3.33%    63.33%
+gender_prediction                   30     3.33%    96.67%
+intonation_perception               30     0.00%   100.00%
+pitch_comparison                    30    10.00%    66.67%
+speaker_identity_recognition        30    36.67%    16.67%
+speed_comparison                    30    13.33%    83.33%
+total_speaker_counting              30     3.33%    93.33%
+vocal_range_comparison              30    13.33%    63.33%
+volume_comparison                   30    10.00%    76.67%
+----------------------------------------------------------
+Overall                            300     9.33%    75.00%
+
+[report] methods_exp/out/atier/report_snr_K50_a16.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 5)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30     0.00%    86.67%
+emotion_recognition                 30     3.33%    63.33%
+gender_prediction                   30     3.33%    96.67%
+intonation_perception               30     0.00%   100.00%
+pitch_comparison                    30    10.00%    70.00%
+speaker_identity_recognition        30    26.67%    23.33%
+speed_comparison                    30    13.33%    80.00%
+total_speaker_counting              30     3.33%    93.33%
+vocal_range_comparison              30    10.00%    70.00%
+volume_comparison                   30     6.67%    80.00%
+----------------------------------------------------------
+Overall                            300     7.67%    76.33%
+
+[report] methods_exp/out/atier/report_snr_K200_a8.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 6)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30     0.00%    83.33%
+emotion_recognition                 30     3.33%    63.33%
+gender_prediction                   30     3.33%    96.67%
+intonation_perception               30     0.00%    96.67%
+pitch_comparison                    30    10.00%    66.67%
+speaker_identity_recognition        30    33.33%    23.33%
+speed_comparison                    30    13.33%    80.00%
+total_speaker_counting              30     3.33%    93.33%
+vocal_range_comparison              30    13.33%    76.67%
+volume_comparison                   30    16.67%    73.33%
+----------------------------------------------------------
+Overall                            300     9.67%    75.33%
+
+[report] methods_exp/out/atier/report_snr_K200_a16.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 2)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30    10.00%    73.33%
+emotion_recognition                 30    13.33%    63.33%
+gender_prediction                   30     6.67%    90.00%
+intonation_perception               30    10.00%    86.67%
+pitch_comparison                    30    13.33%    70.00%
+speaker_identity_recognition        30    26.67%    36.67%
+speed_comparison                    30    10.00%    76.67%
+total_speaker_counting              30    20.00%    73.33%
+vocal_range_comparison              30    20.00%    60.00%
+volume_comparison                   30    13.33%    66.67%
+----------------------------------------------------------
+Overall                            300    14.33%    69.67%
+
+[report] methods_exp/out/atier/report_tvar_K50_a8.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 4)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30    43.33%    20.00%
+emotion_recognition                 30    50.00%    10.00%
+gender_prediction                   30    60.00%    40.00%
+intonation_perception               30    50.00%    46.67%
+pitch_comparison                    30    23.33%    53.33%
+speaker_identity_recognition        30    46.67%     6.67%
+speed_comparison                    30    10.00%    73.33%
+total_speaker_counting              30    33.33%    56.67%
+vocal_range_comparison              30    20.00%    66.67%
+volume_comparison                   30    10.00%    76.67%
+----------------------------------------------------------
+Overall                            300    34.67%    45.00%
+
+[report] methods_exp/out/atier/report_tvar_K50_a16.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 1)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30    16.67%    60.00%
+emotion_recognition                 30    13.33%    50.00%
+gender_prediction                   30    30.00%    70.00%
+intonation_perception               30    43.33%    50.00%
+pitch_comparison                    30    13.33%    66.67%
+speaker_identity_recognition        30    40.00%    13.33%
+speed_comparison                    30    13.33%    70.00%
+total_speaker_counting              30    26.67%    66.67%
+vocal_range_comparison              30    13.33%    66.67%
+volume_comparison                   30    10.00%    70.00%
+----------------------------------------------------------
+Overall                            300    22.00%    58.33%
+
+[report] methods_exp/out/atier/report_tvar_K200_a8.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 0)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30    36.67%    26.67%
+emotion_recognition                 30    10.00%    40.00%
+gender_prediction                   30    46.67%    53.33%
+intonation_perception               30    50.00%    46.67%
+pitch_comparison                    30    16.67%    53.33%
+speaker_identity_recognition        30    40.00%    16.67%
+speed_comparison                    30    10.00%    70.00%
+total_speaker_counting              30    30.00%    63.33%
+vocal_range_comparison              30    16.67%    66.67%
+volume_comparison                   30    10.00%    76.67%
+----------------------------------------------------------
+Overall                            300    26.67%    51.33%
+
+[report] methods_exp/out/atier/report_tvar_K200_a16.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 0)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30    20.00%    63.33%
+emotion_recognition                 30    13.33%    60.00%
+gender_prediction                   30     6.67%    93.33%
+intonation_perception               30    10.00%    86.67%
+pitch_comparison                    30    16.67%    73.33%
+speaker_identity_recognition        30    13.33%    33.33%
+speed_comparison                    30    13.33%    70.00%
+total_speaker_counting              30    16.67%    76.67%
+vocal_range_comparison              30    20.00%    66.67%
+volume_comparison                   30    13.33%    60.00%
+----------------------------------------------------------
+Overall                            300    14.33%    68.33%
+
+[report] methods_exp/out/atier/report_meanplustvar_K50_a8.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 5)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30    50.00%    16.67%
+emotion_recognition                 30    46.67%    13.33%
+gender_prediction                   30    63.33%    36.67%
+intonation_perception               30    50.00%    46.67%
+pitch_comparison                    30    23.33%    53.33%
+speaker_identity_recognition        30    43.33%    10.00%
+speed_comparison                    30    10.00%    63.33%
+total_speaker_counting              30    33.33%    56.67%
+vocal_range_comparison              30    16.67%    63.33%
+volume_comparison                   30    10.00%    80.00%
+----------------------------------------------------------
+Overall                            300    34.67%    44.00%
+
+[report] methods_exp/out/atier/report_meanplustvar_K50_a16.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 1)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30    30.00%    23.33%
+emotion_recognition                 30    20.00%    43.33%
+gender_prediction                   30    16.67%    83.33%
+intonation_perception               30    43.33%    50.00%
+pitch_comparison                    30    16.67%    56.67%
+speaker_identity_recognition        30    40.00%    13.33%
+speed_comparison                    30     6.67%    73.33%
+total_speaker_counting              30    30.00%    63.33%
+vocal_range_comparison              30    16.67%    70.00%
+volume_comparison                   30    10.00%    80.00%
+----------------------------------------------------------
+Overall                            300    23.00%    55.67%
+
+[report] methods_exp/out/atier/report_meanplustvar_K200_a8.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 1)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30    43.33%    20.00%
+emotion_recognition                 30    20.00%    30.00%
+gender_prediction                   30    56.67%    43.33%
+intonation_perception               30    50.00%    46.67%
+pitch_comparison                    30    20.00%    53.33%
+speaker_identity_recognition        30    43.33%     6.67%
+speed_comparison                    30     6.67%    70.00%
+total_speaker_counting              30    36.67%    60.00%
+vocal_range_comparison              30    20.00%    63.33%
+volume_comparison                   30     6.67%    86.67%
+----------------------------------------------------------
+Overall                            300    30.33%    48.00%
+
+[report] methods_exp/out/atier/report_meanplustvar_K200_a16.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 75)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30     6.67%    70.00%
+emotion_recognition                 30     6.67%    63.33%
+gender_prediction                   30     0.00%   100.00%
+intonation_perception               30     0.00%   100.00%
+pitch_comparison                    30    10.00%    40.00%
+speaker_identity_recognition        30     6.67%    10.00%
+speed_comparison                    30     6.67%    20.00%
+total_speaker_counting              30    10.00%    86.67%
+vocal_range_comparison              30     0.00%    40.00%
+volume_comparison                   30     3.33%    43.33%
+----------------------------------------------------------
+Overall                            300     5.00%    57.33%
+
+[report] methods_exp/out/atier/report_content_ln_K50_a8.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 132)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30    40.00%    13.33%
+emotion_recognition                 30    20.00%    30.00%
+gender_prediction                   30    46.67%    36.67%
+intonation_perception               30    30.00%    50.00%
+pitch_comparison                    30    16.67%    13.33%
+speaker_identity_recognition        30     3.33%    10.00%
+speed_comparison                    30     0.00%    10.00%
+total_speaker_counting              30    30.00%    53.33%
+vocal_range_comparison              30     3.33%    10.00%
+volume_comparison                   30     3.33%    13.33%
+----------------------------------------------------------
+Overall                            300    19.33%    24.00%
+
+[report] methods_exp/out/atier/report_content_ln_K50_a16.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 71)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30     6.67%    86.67%
+emotion_recognition                 30    10.00%    66.67%
+gender_prediction                   30     6.67%    90.00%
+intonation_perception               30     3.33%    96.67%
+pitch_comparison                    30    13.33%    33.33%
+speaker_identity_recognition        30    16.67%    20.00%
+speed_comparison                    30    10.00%    26.67%
+total_speaker_counting              30     6.67%    80.00%
+vocal_range_comparison              30    10.00%    30.00%
+volume_comparison                   30     3.33%    43.33%
+----------------------------------------------------------
+Overall                            300     8.67%    57.33%
+
+[report] methods_exp/out/atier/report_content_ln_K200_a8.json
+VoxParadox Evaluation
+  Dataset:     300 examples across 10 tasks
+  Predictions: 300 loaded (missing: 0, parse-failed: 103)
+
+Task                                 N    GT Acc       ALA
+----------------------------------------------------------
+age_prediction                      30    30.00%    23.33%
+emotion_recognition                 30    10.00%    30.00%
+gender_prediction                   30    53.33%    46.67%
+intonation_perception               30    46.67%    40.00%
+pitch_comparison                    30     0.00%    16.67%
+speaker_identity_recognition        30     3.33%    16.67%
+speed_comparison                    30    10.00%    16.67%
+total_speaker_counting              30    30.00%    40.00%
+vocal_range_comparison              30     3.33%    13.33%
+volume_comparison                   30    16.67%    13.33%
+----------------------------------------------------------
+Overall                            300    20.33%    25.67%
+
+[report] methods_exp/out/atier/report_content_ln_K200_a16.json
+
+=== QWEN OMNI method sweep (gt_acc / ala %, Δ vs baseline) ===
+  baseline               gt_acc=8.67  ala=76.00  Δacc=+0.00  Δala=+0.00
+  content_K50_a8         gt_acc=11.00  ala=70.67  Δacc=+2.33  Δala=-5.33
+  content_K50_a16        gt_acc=31.00  ala=45.33  Δacc=+22.33  Δala=-30.67
+  content_K200_a8        gt_acc=23.67  ala=59.00  Δacc=+15.00  Δala=-17.00
+  content_K200_a16       gt_acc=29.33  ala=48.00  Δacc=+20.67  Δala=-28.00
+  snr_K50_a8             gt_acc=9.00  ala=76.33  Δacc=+0.33  Δala=+0.33
+  snr_K50_a16            gt_acc=9.33  ala=75.00  Δacc=+0.67  Δala=-1.00
+  snr_K200_a8            gt_acc=7.67  ala=76.33  Δacc=-1.00  Δala=+0.33
+  snr_K200_a16           gt_acc=9.67  ala=75.33  Δacc=+1.00  Δala=-0.67
+  tvar_K50_a8            gt_acc=14.33  ala=69.67  Δacc=+5.67  Δala=-6.33
+  tvar_K50_a16           gt_acc=34.67  ala=45.00  Δacc=+26.00  Δala=-31.00
+  tvar_K200_a8           gt_acc=22.00  ala=58.33  Δacc=+13.33  Δala=-17.67
+  tvar_K200_a16          gt_acc=26.67  ala=51.33  Δacc=+18.00  Δala=-24.67
+  meanplustvar_K50_a8    gt_acc=14.33  ala=68.33  Δacc=+5.67  Δala=-7.67
+  meanplustvar_K50_a16   gt_acc=34.67  ala=44.00  Δacc=+26.00  Δala=-32.00
+  meanplustvar_K200_a8   gt_acc=23.00  ala=55.67  Δacc=+14.33  Δala=-20.33
+  meanplustvar_K200_a16  gt_acc=30.33  ala=48.00  Δacc=+21.67  Δala=-28.00
+  content_ln_K50_a8      gt_acc=5.00  ala=57.33  Δacc=-3.67  Δala=-18.67
+  content_ln_K50_a16     gt_acc=19.33  ala=24.00  Δacc=+10.67  Δala=-52.00
+  content_ln_K200_a8     gt_acc=8.67  ala=57.33  Δacc=+0.00  Δala=-18.67
+  content_ln_K200_a16    gt_acc=20.33  ala=25.67  Δacc=+11.67  Δala=-50.33

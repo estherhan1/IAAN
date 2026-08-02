@@ -1,0 +1,84 @@
+{
+  "dataset": "/livingrooms/khlu/undergraduate_research/Yu-Han/contra_decode/voxparadox/VoxParadox/data/voxparadox_test700.json",
+  "predictions": "/livingrooms/khlu/undergraduate_research/Yu-Han/contra_decode/voxparadox/VoxParadox/methods_exp/out/test700_variants/predictions_meanplus2tvar_K50_a16.jsonl",
+  "n_examples": 700,
+  "n_predictions": 700,
+  "n_missing": 0,
+  "n_parse_failed": 11,
+  "overall": {
+    "gt_acc": 33.42857142857143,
+    "ala": 44.285714285714285
+  },
+  "per_task": {
+    "age_prediction": {
+      "n": 70,
+      "gt_correct": 14,
+      "adv_correct": 22,
+      "gt_acc": 20.0,
+      "ala": 31.428571428571427
+    },
+    "emotion_recognition": {
+      "n": 70,
+      "gt_correct": 32,
+      "adv_correct": 12,
+      "gt_acc": 45.714285714285715,
+      "ala": 17.142857142857142
+    },
+    "gender_prediction": {
+      "n": 70,
+      "gt_correct": 48,
+      "adv_correct": 22,
+      "gt_acc": 68.57142857142857,
+      "ala": 31.428571428571427
+    },
+    "intonation_perception": {
+      "n": 70,
+      "gt_correct": 31,
+      "adv_correct": 35,
+      "gt_acc": 44.285714285714285,
+      "ala": 50.0
+    },
+    "pitch_comparison": {
+      "n": 70,
+      "gt_correct": 15,
+      "adv_correct": 43,
+      "gt_acc": 21.428571428571427,
+      "ala": 61.42857142857143
+    },
+    "speaker_identity_recognition": {
+      "n": 70,
+      "gt_correct": 24,
+      "adv_correct": 16,
+      "gt_acc": 34.285714285714285,
+      "ala": 22.857142857142858
+    },
+    "speed_comparison": {
+      "n": 70,
+      "gt_correct": 11,
+      "adv_correct": 40,
+      "gt_acc": 15.714285714285714,
+      "ala": 57.142857142857146
+    },
+    "total_speaker_counting": {
+      "n": 70,
+      "gt_correct": 37,
+      "adv_correct": 25,
+      "gt_acc": 52.857142857142854,
+      "ala": 35.714285714285715
+    },
+    "vocal_range_comparison": {
+      "n": 70,
+      "gt_correct": 12,
+      "adv_correct": 44,
+      "gt_acc": 17.142857142857142,
+      "ala": 62.857142857142854
+    },
+    "volume_comparison": {
+      "n": 70,
+      "gt_correct": 10,
+      "adv_correct": 51,
+      "gt_acc": 14.285714285714286,
+      "ala": 72.85714285714286
+    }
+  }
+}

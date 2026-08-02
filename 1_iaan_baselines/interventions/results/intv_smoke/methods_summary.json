@@ -1,0 +1,22 @@
+{
+  "baseline": {
+    "gt_acc": 0.0,
+    "ala": 1.0
+  },
+  "meanplustvar_scale_K50_a16": {
+    "gt_acc": 0.6666666666666666,
+    "ala": 0.0
+  },
+  "meanplustvar_contrast_K50_a16": {
+    "gt_acc": 0.3333333333333333,
+    "ala": 0.0
+  },
+  "meanplustvar_bidir_K50_a16_b0.25": {
+    "gt_acc": 0.6666666666666666,
+    "ala": 0.0
+  },
+  "meanplustvar_graded_K400_a16": {
+    "gt_acc": 0.3333333333333333,
+    "ala": 0.3333333333333333
+  }
+}

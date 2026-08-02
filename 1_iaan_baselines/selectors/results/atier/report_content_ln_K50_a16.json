@@ -1,0 +1,84 @@
+{
+  "dataset": "/livingrooms/khlu/undergraduate_research/Yu-Han/contra_decode/voxparadox/VoxParadox/data/voxparadox_dev300.json",
+  "predictions": "/livingrooms/khlu/undergraduate_research/Yu-Han/contra_decode/voxparadox/VoxParadox/methods_exp/out/atier/predictions_content_ln_K50_a16.jsonl",
+  "n_examples": 300,
+  "n_predictions": 300,
+  "n_missing": 0,
+  "n_parse_failed": 132,
+  "overall": {
+    "gt_acc": 19.333333333333332,
+    "ala": 24.0
+  },
+  "per_task": {
+    "age_prediction": {
+      "n": 30,
+      "gt_correct": 12,
+      "adv_correct": 4,
+      "gt_acc": 40.0,
+      "ala": 13.333333333333334
+    },
+    "emotion_recognition": {
+      "n": 30,
+      "gt_correct": 6,
+      "adv_correct": 9,
+      "gt_acc": 20.0,
+      "ala": 30.0
+    },
+    "gender_prediction": {
+      "n": 30,
+      "gt_correct": 14,
+      "adv_correct": 11,
+      "gt_acc": 46.666666666666664,
+      "ala": 36.666666666666664
+    },
+    "intonation_perception": {
+      "n": 30,
+      "gt_correct": 9,
+      "adv_correct": 15,
+      "gt_acc": 30.0,
+      "ala": 50.0
+    },
+    "pitch_comparison": {
+      "n": 30,
+      "gt_correct": 5,
+      "adv_correct": 4,
+      "gt_acc": 16.666666666666668,
+      "ala": 13.333333333333334
+    },
+    "speaker_identity_recognition": {
+      "n": 30,
+      "gt_correct": 1,
+      "adv_correct": 3,
+      "gt_acc": 3.3333333333333335,
+      "ala": 10.0
+    },
+    "speed_comparison": {
+      "n": 30,
+      "gt_correct": 0,
+      "adv_correct": 3,
+      "gt_acc": 0.0,
+      "ala": 10.0
+    },
+    "total_speaker_counting": {
+      "n": 30,
+      "gt_correct": 9,
+      "adv_correct": 16,
+      "gt_acc": 30.0,
+      "ala": 53.333333333333336
+    },
+    "vocal_range_comparison": {
+      "n": 30,
+      "gt_correct": 1,
+      "adv_correct": 3,
+      "gt_acc": 3.3333333333333335,
+      "ala": 10.0
+    },
+    "volume_comparison": {
+      "n": 30,
+      "gt_correct": 1,
+      "adv_correct": 4,
+      "gt_acc": 3.3333333333333335,
+      "ala": 13.333333333333334
+    }
+  }
+}

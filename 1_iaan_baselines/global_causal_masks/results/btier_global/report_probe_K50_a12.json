@@ -1,0 +1,84 @@
+{
+  "dataset": "/livingrooms/khlu/undergraduate_research/Yu-Han/contra_decode/voxparadox/VoxParadox/data/voxparadox_dev300.json",
+  "predictions": "/livingrooms/khlu/undergraduate_research/Yu-Han/contra_decode/voxparadox/VoxParadox/methods_exp/out/btier_global/predictions_probe_K50_a12.jsonl",
+  "n_examples": 300,
+  "n_predictions": 300,
+  "n_missing": 0,
+  "n_parse_failed": 3,
+  "overall": {
+    "gt_acc": 8.666666666666666,
+    "ala": 75.33333333333333
+  },
+  "per_task": {
+    "age_prediction": {
+      "n": 30,
+      "gt_correct": 0,
+      "adv_correct": 25,
+      "gt_acc": 0.0,
+      "ala": 83.33333333333333
+    },
+    "emotion_recognition": {
+      "n": 30,
+      "gt_correct": 1,
+      "adv_correct": 19,
+      "gt_acc": 3.3333333333333335,
+      "ala": 63.333333333333336
+    },
+    "gender_prediction": {
+      "n": 30,
+      "gt_correct": 1,
+      "adv_correct": 29,
+      "gt_acc": 3.3333333333333335,
+      "ala": 96.66666666666667
+    },
+    "intonation_perception": {
+      "n": 30,
+      "gt_correct": 0,
+      "adv_correct": 30,
+      "gt_acc": 0.0,
+      "ala": 100.0
+    },
+    "pitch_comparison": {
+      "n": 30,
+      "gt_correct": 2,
+      "adv_correct": 21,
+      "gt_acc": 6.666666666666667,
+      "ala": 70.0
+    },
+    "speaker_identity_recognition": {
+      "n": 30,
+      "gt_correct": 10,
+      "adv_correct": 6,
+      "gt_acc": 33.333333333333336,
+      "ala": 20.0
+    },
+    "speed_comparison": {
+      "n": 30,
+      "gt_correct": 4,
+      "adv_correct": 24,
+      "gt_acc": 13.333333333333334,
+      "ala": 80.0
+    },
+    "total_speaker_counting": {
+      "n": 30,
+      "gt_correct": 2,
+      "adv_correct": 27,
+      "gt_acc": 6.666666666666667,
+      "ala": 90.0
+    },
+    "vocal_range_comparison": {
+      "n": 30,
+      "gt_correct": 4,
+      "adv_correct": 21,
+      "gt_acc": 13.333333333333334,
+      "ala": 70.0
+    },
+    "volume_comparison": {
+      "n": 30,
+      "gt_correct": 2,
+      "adv_correct": 24,
+      "gt_acc": 6.666666666666667,
+      "ala": 80.0
+    }
+  }
+}
