@@ -33,8 +33,7 @@ class TestIAAN(unittest.TestCase):
         with amplify_fc2_inputs([fc2], {0: torch.tensor([1])}, 3):
             expected = x.clone()
             expected[..., 1] *= 3
-            self.assertTrue(torch.allclose(fc2(x), fc2.weight @ expected.transpose(-1, -2)
-                                             .transpose(-1, -2)))
+            self.assertTrue(torch.allclose(fc2(x), torch.nn.functional.linear(expected, fc2.weight, fc2.bias)))
         self.assertTrue(torch.allclose(before, fc2(x)))
 
     def test_invalid_configuration(self):
