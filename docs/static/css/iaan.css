@@ -1,63 +1,50 @@
-/* IAAN styling layered on Academic Project Page Template's Bulma/index.css. */
-:root{--ink:#172f4c;--muted:#56687d;--aqua:#1a8790;--soft:#f3f7f9;}
-html{scroll-behavior:smooth;}
-body{font-family:'DM Sans',Arial,sans-serif;color:#24344a;background:white;}
-.hero.publication-header{background:linear-gradient(153deg,#f0f6fa 0%,#f9fafc 70%,#eaf6f4 100%);}
-.publication-header .hero-body{padding:6rem 1.2rem 5.5rem;}
-.eyebrow,.section-kicker{font-weight:700;color:var(--aqua);letter-spacing:.18em;font-size:.75rem;text-transform:uppercase;margin-bottom:1rem;}
-.publication-title{font-family:'Source Serif 4',Georgia,serif;color:var(--ink);font-size:clamp(2rem,4.5vw,3.35rem);line-height:1.17;max-width:1080px;margin:0 auto 2rem!important;font-weight:650;}
-.publication-title span{color:#2e506e;}
-.author-list{display:flex;justify-content:center;flex-wrap:wrap;gap:.35rem 1.55rem;font-size:1.07rem;font-weight:600;margin:1rem auto 1.1rem;}
-.author-list sup,.affiliation sup{font-size:.67em;color:#52687b;}
-.affiliation{font-size:.87rem;color:var(--muted);margin:.35rem auto;max-width:920px;line-height:1.6;}
-.publication-links{display:flex;flex-wrap:wrap;justify-content:center;gap:.7rem;margin:2rem auto 0;}
-.publication-links .button{width:auto!important;background:#1e354e;border:1px solid #1e354e;color:#fff!important;padding:0 1.3rem;font-weight:600;min-width:140px;box-shadow:none;}
-.publication-links .button:hover{background:#236e78;border-color:#236e78;}
-.section{padding:4.5rem 1.2rem;}
-.section-heading{font-family:'Source Serif 4',Georgia,serif;color:var(--ink);font-size:2.15rem!important;line-height:1.2;}
-.section-lead{font-size:1.08rem;color:#46576a;max-width:840px;line-height:1.75;margin-bottom:2.2rem;}
-.method-section{background:white;}
-.diagram{background:linear-gradient(150deg,#f8fbfd,#edf5f7);border:1px solid #dae4eb;border-radius:16px;padding:2rem;max-width:860px;margin:auto;}
-.diagram-sources{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;}
-.source-block{background:white;border:1px solid #cbdce6;border-radius:12px;padding:1rem;color:#27899c;display:flex;flex-direction:column;align-items:center;gap:.35rem;}
-.source-block.noise{color:#8393aa;}
-.source-block svg{width:100%;height:60px;max-width:250px;}
-.source-label,.encoder-label{font-size:.75rem;font-weight:700;color:#4d6778;letter-spacing:.12em;}
-.source-foot{font-size:.82rem;color:#788a9c;}
-.diagram-arrow{text-align:center;color:#6b96a5;font-size:1.6rem;line-height:2.5rem;}
-.encoder{background:white;border:2px solid #bfd7df;border-radius:13px;text-align:center;padding:1.2rem;max-width:570px;margin:auto;}
-.neuron-grid{display:grid;grid-template-columns:repeat(9,1fr);gap:.4rem;max-width:440px;margin:1rem auto;}
-.neuron-grid span{height:18px;border-radius:5px;background:#d5e1e8;}
-.neuron-grid .accent{background:#12a3a0;box-shadow:0 0 0 2px #bde8e6;}
-.encoder-sub{color:#6d8090;font-size:.83rem;}
-.method-bottom{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
-.method-bottom>div{border:1px solid #cddfe5;background:white;border-radius:10px;padding:1rem;text-align:center;display:flex;flex-direction:column;gap:.55rem;color:#40536b;font-size:.91rem;}
-.method-bottom strong{color:#1a6d76;}
-.method-bottom code{color:#24516d;background:none;padding:0;white-space:normal;}
-.figure-caption{font-size:.82rem;color:#758499;margin:1rem auto;line-height:1.7;}
-.results-section{background:#f7fafb;}
-.results-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.3rem 0 2rem;}
-.result-card{background:white;border:1px solid #e0e8ed;border-radius:13px;padding:1.4rem 1.25rem;}
-.result-model{font-size:.91rem;font-weight:700;color:var(--ink);}
-.result-gain{font-size:2.3rem;color:#167f81;font-weight:700;margin:.75rem 0 1rem;letter-spacing:-.05em;}
-.result-gain span{font-size:.85rem;letter-spacing:0;color:#6e7a8b;}
-.result-bar{height:40px;background:#f1f5f7;position:relative;border-radius:5px;overflow:hidden;}
-.result-before,.result-after{position:absolute;height:10px;border-radius:10px;left:0;}
-.result-before{background:#a6b7c6;top:7px;}
-.result-after{background:#1c9b9a;bottom:7px;}
-.result-numbers{font-size:1rem;margin:.7rem 0 0;color:#5a6e80;}
-.result-numbers span{color:#9cabb8;margin:0 .3rem;}
-.result-numbers strong{color:#126f7c;}
-.main-results{border:1px solid #e1e8eb;overflow:hidden;background:white;}
-.main-results th{background:#ecf3f6;color:#294b65!important;font-size:.83rem!important;}
-.main-results td{font-size:.9rem;color:#354a61;}
-.abstract-text{font-size:1.07rem;line-height:1.9;color:#3f5064;text-align:justify;}
-.code-section{background:#f6f9fa;}
-pre{background:#1b2e43;color:#eaf5f8;padding:1.5rem;border-radius:11px;white-space:pre-wrap;overflow:auto;font-size:.91rem;line-height:1.7;}
-pre code{color:inherit;background:none;padding:0;}
-.citation-section pre{margin-bottom:1rem;}
-#copy-bibtex{width:auto;min-width:120px;}
-.footer{background:#f0f4f6;padding:2rem 1.2rem;color:#5a6d7d;font-size:.84rem;}
-.footer .container{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
-.attribution{color:#7d8c99;}
-@media(max-width:768px){.publication-header .hero-body{padding:3.5rem 1rem;}.publication-title{font-size:2rem!important;}.section{padding:3rem 1rem;}.results-cards{grid-template-columns:1fr;}.method-bottom{grid-template-columns:1fr;}.diagram{padding:1.1rem;}.diagram-sources{gap:.5rem;}.source-block{padding:.65rem;}.source-block svg{height:42px;}.publication-links .button{min-width:auto;font-size:.8rem;}}
+/* IAAN-specific components. Typography, colours, buttons, sections and
+   BibTeX come from the Academic Project Page Template (index.css);
+   this file only styles the method diagram and results cards using its variables. */
+
+.publication-affiliations { color: var(--text-secondary); line-height: 1.7; }
+.publication-affiliations .venue { color: var(--text-primary); font-weight: 600; margin-top: .4rem; }
+
+/* Method diagram (teaser) */
+.diagram { background: var(--background-secondary); border: 1px solid var(--border-color); border-radius: var(--border-radius-lg); padding: 2rem; box-shadow: var(--shadow-sm); }
+.diagram-sources { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.source-block { background: var(--background-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 1rem; color: var(--primary-color); display: flex; flex-direction: column; align-items: center; gap: .35rem; }
+.source-block.noise { color: var(--text-light); }
+.source-block svg { width: 100%; height: 60px; max-width: 250px; }
+.source-label, .encoder-label { font-size: .75rem; font-weight: 700; color: var(--text-secondary); letter-spacing: .12em; }
+.source-foot, .encoder-sub { font-size: .82rem; color: var(--text-secondary); }
+.diagram-arrow { text-align: center; color: var(--text-light); font-size: 1.2rem; line-height: 2.5rem; }
+.encoder { background: var(--background-primary); border: 2px solid var(--primary-color); border-radius: var(--border-radius); text-align: center; padding: 1.2rem; max-width: 570px; margin: auto; }
+.neuron-grid { display: grid; grid-template-columns: repeat(9, 1fr); gap: .4rem; max-width: 440px; margin: 1rem auto; }
+.neuron-grid span { height: 18px; border-radius: 5px; background: var(--background-accent); border: 1px solid var(--border-color); }
+.neuron-grid .accent { background: var(--primary-color); border-color: var(--primary-color); }
+.method-bottom { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.method-bottom > div { background: var(--background-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 1rem; text-align: center; display: flex; flex-direction: column; gap: .5rem; color: var(--text-secondary); font-size: .9rem; }
+.method-bottom strong { color: var(--primary-color); }
+.method-bottom code { color: var(--text-primary); background: none; padding: 0; white-space: normal; }
+.teaser .subtitle { margin-top: 1.5rem; }
+
+/* Results */
+.results-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0 2rem; }
+.result-card { background: var(--background-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 1.4rem 1.25rem; box-shadow: var(--shadow-sm); }
+.result-model { font-weight: 700; color: var(--text-primary); }
+.result-gain { font-size: 2.2rem; font-weight: 800; color: var(--primary-color); margin: .5rem 0 1rem; letter-spacing: -.03em; }
+.result-gain span { font-size: .85rem; font-weight: 500; letter-spacing: 0; color: var(--text-secondary); }
+.result-bar { height: 40px; background: var(--background-accent); position: relative; border-radius: 6px; overflow: hidden; }
+.result-before, .result-after { position: absolute; height: 10px; border-radius: 10px; left: 0; }
+.result-before { background: var(--text-light); top: 7px; }
+.result-after { background: var(--primary-color); bottom: 7px; }
+.result-numbers { margin-top: .7rem; color: var(--text-secondary); }
+.result-numbers span { color: var(--text-light); margin: 0 .3rem; }
+.result-numbers strong { color: var(--primary-color); }
+.main-results { border: 1px solid var(--border-color); border-radius: var(--border-radius); overflow: hidden; }
+.main-results th { background: var(--background-accent); }
+.figure-caption { font-size: .85rem; color: var(--text-secondary); margin-top: 1rem; }
+
+@media (max-width: 768px) {
+  .diagram { padding: 1rem; }
+  .diagram-sources { gap: .5rem; }
+  .source-block { padding: .6rem; }
+  .source-block svg { height: 42px; }
+  .method-bottom, .results-cards { grid-template-columns: 1fr; }
+}
