@@ -60,7 +60,7 @@ class TestMainTable(unittest.TestCase):
             source.write_text(json.dumps(samples))
             out=root/"subset.json"
             self.assertEqual(select_data(source,out,["gender_prediction"]),1)
-            self.assertEqual(json.loads(out.read_text()),[samples[0]])
+            self.assertEqual(json.loads(out.read_text())[0]["id"], samples[0]["id"])\n            self.assertEqual(json.loads(out.read_text())[0]["_iaan_index"], 0)
 
 if __name__=="__main__":
     unittest.main()

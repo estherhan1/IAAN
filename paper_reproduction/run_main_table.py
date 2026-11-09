@@ -1,16 +1,11 @@
 #!/usr/bin/env python3
-"""Select models/tasks and dispatch the original IAAN inference commands.
-
-Published SLT 2026 Table II defaults, NOT the best configurations on VoxParadox:
-AF3 K50 g16, Qwen K50 g12, Kimi K200 g12.
-The original model-specific official runners are external dependencies.
-"""
+"""One-command IAAN main-table runner. Supports any model/task subset."""
 from __future__ import annotations
+
 import argparse
 import json
 import os
 from pathlib import Path
-import shlex
 import subprocess
 import sys
 
@@ -35,56 +30,87 @@ def parse_list(value: str, valid: set[str], aliases: dict[str, str] | None = Non
     if value.strip().lower() == "all":
         return list(DEFAULTS if aliases is None else TASK_NAMES)
     mapping = aliases if aliases is not None else {x: x for x in valid}
-    output = []
+    selected = []
     for raw in value.split(","):
         key = raw.strip().lower().replace("-", "_")
         item = mapping.get(key)
         if item is None or item not in valid:
             raise ValueError(f"Unknown choice '{raw}'. Options: {', '.join(sorted(mapping))}")
-        if item not in output:
-            output.append(item)
-    if not output:
+        if item not in selected:
+            selected.append(item)
+    if not selected:
         raise ValueError("Empty selection")
-    return output
+    return selected
 
 
 def select_data(source: Path, target: Path, tasks: list[str]) -> int:
-    with source.open(encoding="utf-8") as handle:
-        items = json.load(handle)
+    items = json.loads(source.read_text(encoding="utf-8"))
     if not isinstance(items, list):
-        raise ValueError("VoxParadox dataset must be a JSON list of samples")
+        raise ValueError("VoxParadox dataset must be a list of JSON records")
     if len({str(it["id"]) for it in items}) != len(items):
-        raise ValueError("Duplicate sample ids")
-    # Official data encodes task in sample id: e.g. emotion_recognition__70.
-    selected = [it for it in items if str(it["id"]).split("__", 1)[0] in tasks]
-    counts = {task: 0 for task in tasks}
-    for it in selected:
-        counts[str(it["id"]).split("__", 1)[0]] += 1
-    if not selected or any(n == 0 for n in counts.values()):
-        raise ValueError(f"Selected tasks missing in dataset. Counts: {counts}")
+        raise ValueError("Duplicate sample IDs")
+    selected = []
+    count = {key: 0 for key in tasks}
+    for i, item in enumerate(items):
+        task = item.get("task_name") or str(item["id"]).split("__", 1)[0]
+        if task not in tasks:
+            continue
+        row = dict(item)
+        row["_iaan_index"] = i  # Preserve full-dataset index for per-clip RNG on subsets.
+        selected.append(row)
+        count[task] += 1
+    if not selected or any(num == 0 for num in count.values()):
+        raise ValueError(f"Missing task(s) in dataset: {count}")
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(json.dumps(selected, ensure_ascii=False, indent=2), encoding="utf-8")
-    print("Selected", len(selected), "examples:", counts, flush=True)
+    target.write_text(json.dumps(selected, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"Selected {len(selected)} samples: {count}", flush=True)
     return len(selected)
 
 
+def obtain_dataset():
+    from huggingface_hub import snapshot_download
+    print("Downloading VoxParadox metadata, evaluator, and audio (first run only)...", flush=True)
+    return Path(snapshot_download(
+        repo_id="IHP-Lab/VoxParadox", repo_type="dataset",
+        allow_patterns=["voxparadox.json", "eval.py", "audio/**"],
+    ))
+
+
+def official_evaluator(dataset_root: Path | None, specified: Path | None):
+    if specified:
+        if not specified.is_file():
+            raise FileNotFoundError(specified)
+        return specified
+    if dataset_root and (dataset_root / "eval.py").is_file():
+        return dataset_root / "eval.py"
+    from huggingface_hub import hf_hub_download
+    return Path(hf_hub_download(
+        repo_id="IHP-Lab/VoxParadox", repo_type="dataset", filename="eval.py"
+    ))
+
+
 def main() -> None:
-    ap = argparse.ArgumentParser(description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = argparse.ArgumentParser(
+        description="Evaluate baseline and IAAN on VoxParadox (main paper table only).")
     ap.add_argument("--model", "--models", default="all",
                     help="af3,qwen,kimi or all (default all)")
     ap.add_argument("--tasks", default="all",
-                    help="comma-separated: age,gender,emotion,pitch,volume,speed,range,intonation,speaker_id,speaker_count; or all")
-    ap.add_argument("--k", type=int, default=None, help="Override K for selected models")
+                    help="age,gender,emotion,pitch,volume,speed,range,intonation,speaker_id,speaker_count or all")
+    ap.add_argument("--k", type=int, default=None,
+                    help="Override paper K for all selected models")
     ap.add_argument("--gain", "--g", type=float, default=None,
-                    help="Override gain g for selected models")
+                    help="Override paper gain for all selected models")
     ap.add_argument("--data", type=Path, default=None,
-                    help="full VoxParadox JSON (or set IAAN_VOXPARADOX_JSON)")
+                    help="Local voxparadox.json; defaults to HF dataset download")
     ap.add_argument("--audio-base", type=Path, default=None,
-                    help="audio directory (or set IAAN_AUDIO_BASE)")
-    ap.add_argument("--output-dir", type=Path, default=None)
-    ap.add_argument("--dry-run", action="store_true",
-                    help="show plan without executing model runners")
+                    help="Dataset directory containing audio/; defaults to parent of --data")
+    ap.add_argument("--eval-script", type=Path, default=None,
+                    help="Local official VoxParadox eval.py; otherwise download from HF")
+    ap.add_argument("--output-dir", type=Path, default=Path("outputs/main_table"))
+    ap.add_argument("--checkpoint", default=None,
+                    help="Model checkpoint override (only when --model chooses one model)")
+    ap.add_argument("--max-new-tokens", type=int, default=64)
+    ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
     try:
         models = parse_list(args.model, set(DEFAULTS))
@@ -92,60 +118,61 @@ def main() -> None:
         if args.k is not None and args.k < 1:
             ap.error("--k must be positive")
         if args.gain is not None and args.gain <= 1:
-            ap.error("--gain must exceed 1")
-        dataset = args.data or (Path(os.environ["IAAN_VOXPARADOX_JSON"])
-                                if os.environ.get("IAAN_VOXPARADOX_JSON") else None)
-        audio_base = args.audio_base or (Path(os.environ["IAAN_AUDIO_BASE"])
-                                         if os.environ.get("IAAN_AUDIO_BASE") else None)
-        out = args.output_dir or Path(os.environ.get("IAAN_OUTPUT_DIR", "outputs/main_table"))
-        settings = {model: (args.k or DEFAULTS[model][0],
-                            args.gain if args.gain is not None else DEFAULTS[model][1])
-                    for model in models}
-        print("Models:", ", ".join(models))
-        print("Tasks:", ", ".join(tasks))
-        print("Parameters:", settings)
+            ap.error("--gain must be > 1")
+        if args.checkpoint and len(models) != 1:
+            ap.error("--checkpoint requires selecting exactly one model")
+        if args.max_new_tokens < 1:
+            ap.error("--max-new-tokens must be positive")
+        settings = {m: (args.k if args.k is not None else DEFAULTS[m][0],
+                        args.gain if args.gain is not None else DEFAULTS[m][1])
+                    for m in models}
+        print("Selected models:", ", ".join(models))
+        print("Selected tasks:", ", ".join(tasks))
+        print("IAAN settings:", settings, flush=True)
         if args.dry_run:
-            for model in models:
-                key = f"IAAN_{model.upper()}_CMD"
-                print(key, "configured" if os.environ.get(key) else "MISSING original official runner")
             return
-        if dataset is None or not dataset.is_file():
-            ap.error("Provide --data /path/to/full_voxparadox.json")
-        if audio_base is None or not audio_base.is_dir():
-            ap.error("Provide --audio-base /path/to/wavs")
-        for model in models:
-            if not os.environ.get(f"IAAN_{model.upper()}_CMD"):
-                ap.error(f"Missing IAAN_{model.upper()}_CMD: original greedy generation runner "
-                         "is not included in this repository; see main_table.env.example")
-        out = out.resolve()
+
+        root = obtain_dataset() if args.data is None else args.data.resolve().parent
+        data = args.data.resolve() if args.data else root / "voxparadox.json"
+        if not data.is_file():
+            raise FileNotFoundError(f"Dataset JSON missing: {data}")
+        audio_base = (args.audio_base.resolve() if args.audio_base else root)
+        if not audio_base.is_dir():
+            raise FileNotFoundError(f"Audio directory missing: {audio_base}")
+        evaluator = official_evaluator(root, args.eval_script)
+        out = args.output_dir.resolve()
         subset = out / "selected_dataset.json"
-        select_data(dataset, subset, tasks)
+        select_data(data, subset, tasks)
+        inf_script = Path(__file__).with_name("infer_main_table.py")
         for model, (k, gain) in settings.items():
-            env = os.environ.copy()
-            env.update({
-                "IAAN_MODEL": model, "IAAN_K": str(k), "IAAN_GAIN": str(gain),
-                "IAAN_DATA_PATH": str(subset.resolve()),
-                "IAAN_VOXPARADOX_JSON": str(subset.resolve()),
-                "IAAN_AUDIO_BASE": str(audio_base.resolve()),
-                "IAAN_OUTPUT_DIR": str(out),
-                "IAAN_MODEL_OUTPUT_DIR": str(out / model),
-                "IAAN_TASKS": ",".join(tasks),
-            })
-            (out / model).mkdir(parents=True, exist_ok=True)
-            print(f"Running {model}: K={k}, gain={gain}", flush=True)
-            subprocess.run(["bash", "-lc", env[f"IAAN_{model.upper()}_CMD"]],
-                           env=env, check=True)
+            model_dir = out / model
+            model_dir.mkdir(parents=True, exist_ok=True)
+            py = os.environ.get(f"IAAN_{model.upper()}_PYTHON", sys.executable)
+            cmd = [
+                py, str(inf_script), "--model", model, "--data", str(subset),
+                "--audio-base", str(audio_base), "--out", str(model_dir),
+                "--k", str(k), "--gain", str(gain),
+                "--max-new-tokens", str(args.max_new_tokens),
+            ]
+            if args.checkpoint:
+                cmd.extend(["--checkpoint", args.checkpoint])
+            print("Running:", " ".join(cmd), flush=True)
+            subprocess.run(cmd, check=True)
             for kind in ("baseline", "iaan"):
-                report = out / model / f"{kind}_report.json"
-                if not report.is_file():
-                    raise FileNotFoundError(f"Original runner must produce {report}")
+                pred = model_dir / f"{kind}_predictions.jsonl"
+                report = model_dir / f"{kind}_report.json"
+                subprocess.run([sys.executable, str(evaluator),
+                                "--dataset", str(subset),
+                                "--predictions", str(pred),
+                                "--report", str(report)], check=True)
         from main_table import render
         table = render(out, models=models, tasks=tasks)
         (out / "Main_Table.md").write_text(table, encoding="utf-8")
         print(table)
         print("Saved:", out / "Main_Table.md")
-    except (ValueError, FileNotFoundError, subprocess.CalledProcessError) as e:
-        print(f"ERROR: {e}", file=sys.stderr)
+    except (ValueError, FileNotFoundError, subprocess.CalledProcessError,
+            ImportError) as error:
+        print(f"ERROR: {error}", file=sys.stderr)
         sys.exit(2)
 
 

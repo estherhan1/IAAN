@@ -1,1 +1,17 @@
+# Model checkpoints / activation caches
 *.pt
+*.pth
+*.safetensors
+# Reproduction downloads, predictions and local configuration
+outputs/
+data/
+*.jsonl.tmp
+paper_reproduction/main_table.env
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.env
+# OS
+.DS_Store
