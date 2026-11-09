@@ -11,6 +11,7 @@
   <meta property="og:title" content="IAAN: Enhancing How Large Audio-Language Models Hear">
   <meta property="og:description" content="Training-free neuron amplification in the audio encoder improves acoustic understanding across three large audio-language models.">
   <meta property="og:url" content="https://estherhan1.github.io/IAAN/">
+  <meta property="og:image" content="https://estherhan1.github.io/IAAN/static/images/fig1_overview.png">
   <link rel="canonical" href="https://estherhan1.github.io/IAAN/">
   <meta name="theme-color" content="#2563eb">
 
@@ -90,22 +91,15 @@
     </div>
   </section>
 
-  <!-- Teaser: method overview (takes the place of the template's teaser video) -->
+  <!-- Teaser: Fig. 1 -->
   <section class="hero teaser">
     <div class="container is-max-desktop">
       <div class="hero-body">
-        <div class="diagram" role="img" aria-label="Real audio and a Gaussian noise reference pass through a frozen audio encoder. Neuron activations are contrasted to select the top K, then the selected neurons are amplified for the answer.">
-          <div class="diagram-sources">
-            <div class="source-block"><span class="source-label">REAL AUDIO</span><svg viewBox="0 0 240 70" preserveAspectRatio="none"><path d="M0 35 L10 35 L17 20 L23 48 L33 11 L40 60 L51 24 L62 44 L72 7 L82 65 L96 23 L109 39 L122 10 L132 55 L145 32 L155 43 L167 14 L178 61 L189 19 L201 47 L214 30 L230 38 L240 35" stroke="currentColor" fill="none" stroke-width="2.5"/></svg><span class="source-foot">Speech waveform</span></div>
-            <div class="source-block noise"><span class="source-label">REFERENCE</span><svg viewBox="0 0 240 70" preserveAspectRatio="none"><path d="M0 38 L5 20 L13 42 L22 28 L30 53 L38 17 L45 41 L53 29 L62 37 L70 15 L78 51 L86 31 L94 47 L103 16 L111 35 L120 27 L129 52 L138 13 L148 45 L159 22 L167 38 L177 17 L190 53 L201 24 L211 44 L221 14 L231 40 L240 29" stroke="currentColor" fill="none" stroke-width="2"/></svg><span class="source-foot">Matched Gaussian noise</span></div>
-          </div>
-          <div class="diagram-arrow"><i class="fas fa-arrow-down"></i></div>
-          <div class="encoder"><span class="encoder-label">FROZEN AUDIO ENCODER</span><div class="neuron-grid" aria-hidden="true"><span></span><span></span><span class="accent"></span><span></span><span></span><span></span><span class="accent"></span><span></span><span></span><span></span><span></span><span class="accent"></span><span></span><span></span><span></span><span></span><span class="accent"></span><span></span></div><span class="encoder-sub">Compare feed-forward neuron activations</span></div>
-          <div class="diagram-arrow"><i class="fas fa-arrow-down"></i></div>
-          <div class="method-bottom"><div><strong>01 · Score</strong><code>sᵢ = mean(aᵢ real) − mean(aᵢ noise)</code></div><div><strong>02 · Select</strong><span>Top-K acoustic neurons</span></div><div><strong>03 · Amplify</strong><code>aᵢ ← g · aᵢ</code></div></div>
-        </div>
+        <figure class="paper-figure">
+          <img src="static/images/fig1_overview.png" alt="Overview of IAAN. 1) Selection: the audio encoder runs on real audio and on noise; per-neuron mean activations are subtracted to get the acoustic score, and the top-K neurons form the amplification set S. 2) Amplification: on the real-audio pass, neurons in S are multiplied by g before the encoder output goes to the LLM with the question." width="1800" height="1274">
+        </figure>
         <h2 class="subtitle has-text-centered">
-          <strong>IAAN</strong> finds the few audio-encoder neurons that respond to real acoustic evidence and amplifies them at inference time &mdash; no training, task labels, or calibration data.
+          <strong>Fig. 1.</strong> Overview of IAAN. The encoder first runs on the real audio <i>x</i> and on a noise reference <i>r</i> to score each feed-forward neuron by its acoustic score <i>s<sub>i</sub></i>; the top-K neurons are then amplified during the encoder pass on the real audio that produces the answer.
         </h2>
       </div>
     </div>
@@ -118,41 +112,348 @@
         <div class="column is-four-fifths">
           <h2 class="title is-3">Abstract</h2>
           <div class="content has-text-justified">
-            <p>Large audio-language models (LALMs) often underperform on fine-grained, non-semantic attributes of speech, such as a speaker's emotion, despite strong performance on speech content. We introduce IAAN, a training-free and label-free method that scores each feed-forward neuron in the audio encoder by contrasting its activation on the real waveform with a noise reference lacking meaningful acoustic cues. IAAN then amplifies the highest-scoring neurons during inference. Across ten non-semantic speech attributes, the method improves accuracy by 25.7 points on Audio-Flamingo-3, 21.4 on Qwen2.5-Omni, and 9.7 on Kimi-Audio. Controlled experiments demonstrate that both encoder-side intervention and neuron-level selectivity are important for these gains.</p>
+            <p>Large audio-language models (LALMs) often underperform on fine-grained, non-semantic attributes of speech, such as a speaker's emotion, despite strong performance on speech content. Improving this without the cost of retraining calls for an effective inference-time intervention, yet most existing methods intervene only after the audio encoder and operate at a relatively coarse granularity. The encoder itself, where acoustic information is first extracted from the waveform, remains largely unexplored, especially at the level of individual neurons. To this end, we introduce IAAN, Identifying and Amplifying Acoustic Neurons, a training-free and label-free method that scores each feed-forward neuron in the audio encoder by contrasting its activation on the real waveform with that on a noise reference lacking the real audio's acoustic information. IAAN then amplifies a small set of the highest-scoring neurons at inference. Across ten non-semantic speech attributes, IAAN improves average accuracy by 25.7 points on Audio-Flamingo-3, 21.4 on Qwen2.5-Omni, and 9.7 on Kimi-Audio. It also continues to improve a model that has already been explicitly fine-tuned to prioritize acoustic evidence. In controlled comparisons, both the encoder locus and neuron-level selectivity prove necessary for this gain. Intervening after the encoder, at the decoding side or inside the language model, yields little to no improvement, or even deteriorates accuracy. The improvement also depends on which specific neurons are amplified, not merely on their number, confirming that IAAN's acoustic score succeeds in identifying the neurons that matter. These results show that a small, precisely targeted intervention inside the audio encoder is an effective and largely untapped way to strengthen the acoustic understanding of LALMs, opening a new direction for inference-time methods that improve acoustic perception through neuron-level access to the encoder.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Main results -->
+  <!-- Highlights -->
   <section class="hero is-small">
     <div class="hero-body">
       <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Highlights</h2>
+        <div class="highlights">
+          <div class="highlight"><span class="highlight-num">+25.7</span><span class="highlight-text">accuracy points on Audio-Flamingo-3 (13.1% → 38.8%), with +21.4 on Qwen2.5-Omni and +9.7 on Kimi-Audio</span></div>
+          <div class="highlight"><span class="highlight-num">≤0.12%</span><span class="highlight-text">of encoder feed-forward neurons are amplified (K=200 of 163,840)</span></div>
+          <div class="highlight"><span class="highlight-num">0</span><span class="highlight-text">training, attribute labels, calibration sets or extra LLM decoding passes needed</span></div>
+          <div class="highlight"><span class="highlight-num">4 / 4</span><span class="highlight-text">models improve, including AF3-PD, which is already fine-tuned for acoustic grounding</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Method -->
+  <section class="hero is-small is-light">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Method</h2>
+        <div class="content">
+          <p><strong>Intuition.</strong> A neuron that encodes a genuine acoustic attribute should respond more strongly to real audio than to unstructured noise, which carries no such attribute. IAAN therefore contrasts each audio-encoder neuron's response to the two inputs and amplifies the ones that respond most to the real audio.</p>
+          <div class="method-steps">
+            <div class="method-step">
+              <span class="step-num">1</span>
+              <h3>Feed-forward neurons</h3>
+              <p>Each coordinate <i>a<sub>i</sub></i> = ϕ(W<sub>1</sub>h)<sub>i</sub> of a transformer block's FFN hidden activation is one neuron. A Whisper-large-v3 encoder has N = 32 × 5120 = 163,840 of them; <i>a<sub>i</sub>(t)</i> is neuron <i>i</i>'s activation at frame <i>t</i>.</p>
+            </div>
+            <div class="method-step">
+              <span class="step-num">2</span>
+              <h3>Acoustic score</h3>
+              <p>The reference <i>r</i> is Gaussian noise with the same length and roughly the same mean and variance as the real clip <i>x</i>. Each neuron is scored by</p>
+              <p class="equation"><i>s<sub>i</sub></i> = mean<sub><i>t</i></sub> <i>a<sub>i</sub></i><sup>real</sup>(<i>t</i>) − mean<sub><i>t</i></sub> <i>a<sub>i</sub></i><sup>ref</sup>(<i>t</i>) <span class="eq-num">(1)</span></p>
+              <p>The score is computed per clip from that clip alone, so no external audio dataset is needed.</p>
+            </div>
+            <div class="method-step">
+              <span class="step-num">3</span>
+              <h3>Select &amp; amplify</h3>
+              <p>The top-K neurons by score form the amplification set S. During the encoder pass on the real audio, a forward hook scales them by gain <i>g</i> &gt; 1:</p>
+              <p class="equation"><i>a<sub>i</sub></i> ← <i>g</i> · <i>a<sub>i</sub></i>, &nbsp; <i>i</i> ∈ S <span class="eq-num">(2)</span></p>
+              <p>The extra passes run only through the encoder (~0.6B), which is an order of magnitude smaller than the LLM (~7B).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Setup -->
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Experimental Setup</h2>
+        <div class="content">
+          <ul>
+            <li><strong>Models.</strong> IAAN is applied to three open-source LALMs (Audio-Flamingo-3, Qwen2.5-Omni and Kimi-Audio) and to AF3-PD, a model fine-tuned on paralinguistic data. GPT-4o Audio and Gemini 2.5 Flash are listed for context only.</li>
+            <li><strong>Benchmark.</strong> <a href="https://huggingface.co/datasets/IHP-Lab/VoxParadox" target="_blank">VoxParadox</a> covers ten non-semantic attributes with 200 multiple-choice items each. The voice carries one attribute while the spoken words imply another (the <em>adversarial label</em>), so reading the transcript does not help.</li>
+            <li><strong>Metrics.</strong> Accuracy (Acc ↑) and adversarial-label agreement (ALA ↓), the share of answers that pick the label implied by the words. Genuine acoustic grounding should raise Acc and lower ALA together.</li>
+            <li><strong>No test-set tuning.</strong> (K, g) is chosen on 190 sarcastic-speech clips from LISTEN by maximizing the listening advantage LA = Acc − ALA; VoxParadox stays held out.</li>
+            <li><strong>Compared methods.</strong> Audio-aware decoding (AAD) contrasts output logits. LLM-amplify applies IAAN's criterion to language-model neurons. HS-steer is dense hidden-state steering at the same encoder layer.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main results -->
+  <section class="hero is-small is-light">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
         <h2 class="title is-3 has-text-centered">Main Results</h2>
-        <p class="subtitle has-text-centered">Average accuracy on the ten VoxParadox paralinguistic tasks, with configurations selected on the independent LISTEN development set.</p>
         <div class="results-cards">
           <div class="result-card"><div class="result-model">Audio-Flamingo-3</div><div class="result-gain">+25.7<span> points</span></div><div class="result-bar"><div class="result-before" style="width:13.1%"></div><div class="result-after" style="width:38.8%"></div></div><div class="result-numbers">13.1% <span>→</span> <strong>38.8%</strong></div></div>
           <div class="result-card"><div class="result-model">Qwen2.5-Omni</div><div class="result-gain">+21.4<span> points</span></div><div class="result-bar"><div class="result-before" style="width:7.6%"></div><div class="result-after" style="width:29%"></div></div><div class="result-numbers">7.6% <span>→</span> <strong>29.0%</strong></div></div>
           <div class="result-card"><div class="result-model">Kimi-Audio</div><div class="result-gain">+9.7<span> points</span></div><div class="result-bar"><div class="result-before" style="width:21.2%"></div><div class="result-after" style="width:30.9%"></div></div><div class="result-numbers">21.2% <span>→</span> <strong>30.9%</strong></div></div>
         </div>
-        <div class="table-container">
-          <table class="table is-fullwidth is-hoverable main-results">
-            <thead><tr><th>Model</th><th>Baseline Acc ↑</th><th>IAAN Acc ↑</th><th>Baseline ALA ↓</th><th>IAAN ALA ↓</th><th>K / g</th></tr></thead>
-            <tbody>
-              <tr><td>Audio-Flamingo-3</td><td>13.1</td><td><strong>38.8</strong></td><td>75.5</td><td><strong>40.5</strong></td><td>50 / 16</td></tr>
-              <tr><td>Qwen2.5-Omni</td><td>7.6</td><td><strong>29.0</strong></td><td>76.9</td><td><strong>48.1</strong></td><td>50 / 12</td></tr>
-              <tr><td>Kimi-Audio</td><td>21.2</td><td><strong>30.9</strong></td><td>64.0</td><td><strong>43.0</strong></td><td>200 / 12</td></tr>
-            </tbody>
-          </table>
+        <div class="content">
+          <ul>
+            <li>IAAN raises accuracy by <strong>25.7 / 21.4 / 9.7</strong> points on AF3 / Qwen2.5 / Kimi while lowering ALA by <strong>35.0 / 28.8 / 21.0</strong> points. Predictions become more grounded in the voice instead of just changing which wrong answer is picked.</li>
+            <li>With IAAN, all three open-source models beat GPT-4o Audio and Gemini 2.5 Flash (24.7% Acc, 60.5% ALA) on both metrics.</li>
+            <li>Even AF3-PD, already fine-tuned for acoustics, improves (70.5% → 75.0% Acc, 22.4% → 17.2% ALA), with intonation jumping from 15.5% to 56.0%.</li>
+          </ul>
         </div>
-        <p class="figure-caption has-text-centered">Published results from the SLT 2026 paper, Table I.</p>
+        <p class="table-title"><strong>Table I.</strong> Accuracy (%) and adversarial-label agreement (ALA, %) on VoxParadox. †: baseline reported by VoxParadox; <em>reproduced</em>: our unamplified baseline under the official protocol. <strong>Bold</strong>: best per column within each model's block.</p>
+        <div class="table-container">
+<table class="table is-narrow paper-table t1">
+<thead><tr><th>Model</th>
+<th class="">Age</th>
+<th class="">Gender</th>
+<th class="">Emotion</th>
+<th class="">Pitch</th>
+<th class="">Volume</th>
+<th class="">Speed</th>
+<th class="">Range</th>
+<th class="">Intonation</th>
+<th class="">Spk ID</th>
+<th class="">Spk Cnt</th>
+<th class="col-avg">Avg. ↑</th>
+<th class="col-ala">ALA ↓</th>
+</tr></thead>
+<tbody><tr class="group-row"><td colspan="13">Open-source LALMs</td></tr>
+<tr class="block-start"><td>Audio-Flamingo-3<sup>†</sup></td><td class="">10.0</td><td class="">16.0</td><td class="">24.5</td><td class="">11.0</td><td class="">11.5</td><td class="">11.5</td><td class="">9.5</td><td class="">34.0</td><td class="">23.5</td><td class="">22.5</td><td class="col-avg">17.4</td><td class="col-ala">68.5</td></tr>
+<tr class=""><td class="sub">reproduced</td><td class="">5.0</td><td class="">15.0</td><td class="">14.0</td><td class="">13.0</td><td class="">15.5</td><td class="">18.0</td><td class="">7.5</td><td class="">0.0</td><td class="">14.5</td><td class="">28.5</td><td class="col-avg">13.1</td><td class="col-ala">75.5</td></tr>
+<tr class=""><td class="sub">AAD</td><td class="">3.5</td><td class="">14.5</td><td class="">18.0</td><td class="">10.5</td><td class="">14.0</td><td class="">17.0</td><td class="">6.0</td><td class="">0.0</td><td class="">15.5</td><td class="">24.5</td><td class="col-avg">12.3</td><td class="col-ala">77.9</td></tr>
+<tr class=""><td class="sub">HS-steer</td><td class="">36.5</td><td class="">51.5</td><td class="">1.5</td><td class="">9.0</td><td class="">12.5</td><td class="">15.0</td><td class="">5.5</td><td class="">45.5</td><td class="">15.5</td><td class="">17.0</td><td class="col-avg">20.9</td><td class="col-ala">63.5</td></tr>
+<tr class=""><td class="sub">LLM-amplify</td><td class="">6.0</td><td class="">16.5</td><td class="">14.0</td><td class="">13.5</td><td class="">15.5</td><td class="">17.5</td><td class="">8.5</td><td class="">0.0</td><td class="">15.5</td><td class="">28.0</td><td class="col-avg">13.5</td><td class="col-ala">74.8</td></tr>
+<tr class="ours"><td class="sub"><strong>IAAN (Ours)</strong></td><td class=""><strong>47.5</strong></td><td class=""><strong>83.0</strong></td><td class=""><strong>56.5</strong></td><td class=""><strong>18.5</strong></td><td class=""><strong>17.5</strong></td><td class=""><strong>21.0</strong></td><td class=""><strong>21.0</strong></td><td class=""><strong>50.0</strong></td><td class=""><strong>33.0</strong></td><td class=""><strong>40.0</strong></td><td class="col-avg"><strong>38.8</strong></td><td class="col-ala"><strong>40.5</strong></td></tr>
+<tr class="block-start"><td>Qwen2.5-Omni<sup>†</sup></td><td class="">1.5</td><td class="">2.0</td><td class="">3.0</td><td class="">13.0</td><td class="">8.0</td><td class="">8.0</td><td class="">12.5</td><td class="">4.5</td><td class="">15.5</td><td class="">11.5</td><td class="col-avg">8.0</td><td class="col-ala">75.2</td></tr>
+<tr class=""><td class="sub">reproduced</td><td class="">2.0</td><td class="">1.5</td><td class="">1.0</td><td class="">11.0</td><td class="">9.5</td><td class="">10.0</td><td class="">9.5</td><td class="">0.0</td><td class="">20.5</td><td class="">11.5</td><td class="col-avg">7.6</td><td class="col-ala">76.9</td></tr>
+<tr class=""><td class="sub">AAD</td><td class="">8.5</td><td class="">7.5</td><td class="">6.0</td><td class="">17.0</td><td class="">13.0</td><td class=""><strong>15.0</strong></td><td class="">17.0</td><td class="">8.5</td><td class="">9.5</td><td class="">16.5</td><td class="col-avg">11.8</td><td class="col-ala">58.7</td></tr>
+<tr class=""><td class="sub">HS-steer</td><td class="">11.5</td><td class="">8.0</td><td class="">8.0</td><td class="">15.0</td><td class="">14.5</td><td class="">13.5</td><td class="">12.0</td><td class="">8.5</td><td class=""><strong>30.0</strong></td><td class="">16.0</td><td class="col-avg">13.7</td><td class="col-ala">68.8</td></tr>
+<tr class=""><td class="sub">LLM-amplify</td><td class="">0.5</td><td class="">1.5</td><td class="">1.0</td><td class="">11.5</td><td class="">10.0</td><td class="">10.0</td><td class="">11.0</td><td class="">0.0</td><td class="">19.5</td><td class="">12.5</td><td class="col-avg">7.8</td><td class="col-ala">76.2</td></tr>
+<tr class="ours"><td class="sub"><strong>IAAN (Ours)</strong></td><td class=""><strong>31.5</strong></td><td class=""><strong>42.0</strong></td><td class=""><strong>36.0</strong></td><td class=""><strong>19.0</strong></td><td class=""><strong>16.0</strong></td><td class=""><strong>15.0</strong></td><td class=""><strong>17.5</strong></td><td class=""><strong>42.5</strong></td><td class="">29.5</td><td class=""><strong>41.5</strong></td><td class="col-avg"><strong>29.0</strong></td><td class="col-ala"><strong>48.1</strong></td></tr>
+<tr class="block-start"><td>Kimi-Audio<sup>†</sup></td><td class="">9.0</td><td class="">24.5</td><td class="">79.0</td><td class="">7.5</td><td class="">12.5</td><td class="">11.0</td><td class="">8.0</td><td class="">5.0</td><td class="">20.5</td><td class="">13.0</td><td class="col-avg">19.0</td><td class="col-ala">69.6</td></tr>
+<tr class=""><td class="sub">reproduced</td><td class="">12.0</td><td class="">33.5</td><td class="">83.5</td><td class="">9.5</td><td class="">19.0</td><td class="">12.5</td><td class="">13.0</td><td class="">5.5</td><td class="">13.0</td><td class="">10.5</td><td class="col-avg">21.2</td><td class="col-ala">64.0</td></tr>
+<tr class=""><td class="sub">AAD</td><td class="">12.5</td><td class="">31.0</td><td class=""><strong>84.5</strong></td><td class="">9.5</td><td class="">18.0</td><td class="">11.5</td><td class="">11.5</td><td class="">5.5</td><td class="">14.0</td><td class="">8.5</td><td class="col-avg">20.6</td><td class="col-ala">63.6</td></tr>
+<tr class=""><td class="sub">HS-steer</td><td class="">13.0</td><td class="">21.0</td><td class="">74.0</td><td class="">10.5</td><td class="">16.0</td><td class="">13.0</td><td class="">11.0</td><td class="">4.5</td><td class="">10.0</td><td class="">9.5</td><td class="col-avg">18.2</td><td class="col-ala">68.0</td></tr>
+<tr class=""><td class="sub">LLM-amplify</td><td class="">12.0</td><td class="">34.0</td><td class="">83.5</td><td class="">9.5</td><td class="">18.0</td><td class="">13.5</td><td class="">13.5</td><td class="">6.0</td><td class="">13.5</td><td class="">10.0</td><td class="col-avg">21.4</td><td class="col-ala">63.6</td></tr>
+<tr class="ours"><td class="sub"><strong>IAAN (Ours)</strong></td><td class=""><strong>30.5</strong></td><td class=""><strong>59.0</strong></td><td class="">18.0</td><td class=""><strong>19.5</strong></td><td class=""><strong>25.0</strong></td><td class=""><strong>18.5</strong></td><td class=""><strong>21.5</strong></td><td class=""><strong>39.5</strong></td><td class=""><strong>32.5</strong></td><td class=""><strong>45.0</strong></td><td class="col-avg"><strong>30.9</strong></td><td class="col-ala"><strong>43.0</strong></td></tr>
+</tbody>
+<tbody><tr class="group-row"><td colspan="13">Specialized Tuned Model</td></tr>
+<tr class="block-start"><td>AF3-PD<sup>†</sup></td><td class="">56.5</td><td class="">100.0</td><td class="">65.5</td><td class="">85.5</td><td class="">69.0</td><td class="">73.0</td><td class="">67.0</td><td class="">47.0</td><td class="">37.0</td><td class="">51.5</td><td class="col-avg">65.2</td><td class="col-ala">54.8</td></tr>
+<tr class=""><td class="sub">reproduced</td><td class="">77.0</td><td class=""><strong>100.0</strong></td><td class="">47.0</td><td class="">98.5</td><td class="">96.5</td><td class="">90.0</td><td class="">96.5</td><td class="">15.5</td><td class="">27.5</td><td class="">56.5</td><td class="col-avg">70.5</td><td class="col-ala">22.4</td></tr>
+<tr class=""><td class="sub">AAD</td><td class="">77.5</td><td class=""><strong>100.0</strong></td><td class=""><strong>48.5</strong></td><td class=""><strong>99.0</strong></td><td class=""><strong>99.0</strong></td><td class="">90.5</td><td class=""><strong>97.0</strong></td><td class="">12.0</td><td class="">27.0</td><td class="">57.5</td><td class="col-avg">70.8</td><td class="col-ala">22.1</td></tr>
+<tr class=""><td class="sub">HS-steer</td><td class="">76.5</td><td class=""><strong>100.0</strong></td><td class="">45.5</td><td class="">98.5</td><td class="">97.0</td><td class="">90.5</td><td class="">96.5</td><td class="">21.5</td><td class=""><strong>31.0</strong></td><td class="">56.0</td><td class="col-avg">71.3</td><td class="col-ala">21.2</td></tr>
+<tr class=""><td class="sub">LLM-amplify</td><td class="">50.5</td><td class="">40.5</td><td class="">25.0</td><td class="">70.5</td><td class="">52.5</td><td class="">50.0</td><td class="">60.0</td><td class="">12.5</td><td class="">20.5</td><td class="">20.0</td><td class="col-avg">40.2</td><td class="col-ala"><strong>15.2</strong></td></tr>
+<tr class="ours"><td class="sub"><strong>IAAN (Ours)</strong></td><td class=""><strong>79.0</strong></td><td class=""><strong>100.0</strong></td><td class="">47.0</td><td class="">98.5</td><td class="">97.0</td><td class=""><strong>91.0</strong></td><td class="">96.5</td><td class=""><strong>56.0</strong></td><td class="">26.0</td><td class=""><strong>59.0</strong></td><td class="col-avg"><strong>75.0</strong></td><td class="col-ala">17.2</td></tr>
+</tbody>
+<tbody><tr class="group-row"><td colspan="13">Proprietary Models</td></tr>
+<tr class=""><td>GPT-4o Audio<sup>†</sup></td><td class="">4.5</td><td class="">1.0</td><td class="">0.0</td><td class="">7.0</td><td class="">5.0</td><td class="">8.0</td><td class="">5.0</td><td class="">0.5</td><td class="">27.0</td><td class="">28.0</td><td class="col-avg">8.6</td><td class="col-ala">81.6</td></tr>
+<tr class=""><td>Gemini 2.5 Flash<sup>†</sup></td><td class="">15.0</td><td class="">14.5</td><td class="">6.0</td><td class="">19.0</td><td class="">31.0</td><td class="">16.0</td><td class="">13.0</td><td class="">19.0</td><td class="">21.0</td><td class="">92.5</td><td class="col-avg">24.7</td><td class="col-ala">60.5</td></tr>
+</tbody>
+</table>
+        </div>
+        <p class="figure-caption">Spk ID = speaker identity, Spk Cnt = speaker counting, Range = vocal range.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Locus & granularity -->
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Where and How Finely to Intervene</h2>
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <span class="comparison-tag after">After the encoder</span>
+            <h3>AAD &amp; LLM-amplify</h3>
+            <p>Contrasting output logits changes accuracy by only a few points either way. Amplifying LLM neurons with the same criterion leaves AF3, Qwen2.5 and Kimi near baseline and cuts AF3-PD from 70.5% to 40.2%.</p>
+          </div>
+          <div class="comparison-card">
+            <span class="comparison-tag dense">Encoder, dense</span>
+            <h3>HS-steer</h3>
+            <p>A dense steering vector at the same encoder layer reaches only 20.9 / 13.7 / 18.2 / 71.3% vs. IAAN's 38.8 / 29.0 / 30.9 / 75.0%. A dense direction mixes the few acoustic neurons with many irrelevant dimensions.</p>
+          </div>
+          <div class="comparison-card is-ours">
+            <span class="comparison-tag ours">Encoder, sparse neurons</span>
+            <h3>IAAN</h3>
+            <p>Highest accuracy on every model while also lowering ALA. It is the only method that consistently produces more acoustically grounded predictions across all four models.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hyperparameters -->
+  <section class="hero is-small is-light">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Hyperparameter Sensitivity</h2>
+        <div class="content">
+          <ul>
+            <li>Nearly <strong>90%</strong> of (K, g) configurations beat the unamplified baseline on VoxParadox. The choice affects how much IAAN helps, not whether it helps.</li>
+            <li>Optimal gains range from g = 8 to 16 and optimal budgets from K = 50 to 200. Too small a gain or too large a budget is unlikely to be optimal.</li>
+            <li>Configurations picked on the LISTEN dev set land within about 3 points of each model's best test configuration.</li>
+          </ul>
+        </div>
+        <p class="table-title"><strong>Table II.</strong> Sweep over neuron budget K and gain g. Left: LA = Acc − ALA on the LISTEN development set; right: Acc on VoxParadox. <strong>Bold</strong>: best per model per dataset; †: configuration selected by maximizing development-set LA.</p>
+        <div class="table-container">
+<table class="table is-narrow paper-table t2">
+<thead><tr><th rowspan="2">Model</th><th rowspan="2">K</th><th colspan="4" class="col-dev">LISTEN dev — LA (%) ↑</th><th colspan="4" class="col-test">VoxParadox test — Acc (%) ↑</th></tr>
+<tr><th class="col-dev">g=4</th><th class="col-dev">g=8</th><th class="col-dev">g=12</th><th class="col-dev">g=16</th><th class="col-test">g=4</th><th class="col-test">g=8</th><th class="col-test">g=12</th><th class="col-test">g=16</th></tr></thead>
+<tbody>
+<tr><td rowspan="4" class="model-cell">Audio-Flamingo-3<br><span class="baseline-note">Baseline: 27.4 / 13.1</span></td><td class="k-cell">50</td><td class="col-dev">47.4</td><td class="col-dev">54.2</td><td class="col-dev">55.3</td><td class="col-dev"><strong>60.0</strong></td><td class="col-test">31.9</td><td class="col-test"><strong>41.5</strong></td><td class="col-test">40.8</td><td class="col-test"><span class="selected">38.8<sup>†</sup></span></td></tr>
+<tr><td class="k-cell">100</td><td class="col-dev">46.8</td><td class="col-dev">53.2</td><td class="col-dev">54.2</td><td class="col-dev">54.2</td><td class="col-test">30.3</td><td class="col-test">38.5</td><td class="col-test">36.9</td><td class="col-test">34.5</td></tr>
+<tr><td class="k-cell">200</td><td class="col-dev">49.5</td><td class="col-dev">53.7</td><td class="col-dev">57.4</td><td class="col-dev">53.7</td><td class="col-test">30.8</td><td class="col-test">35.0</td><td class="col-test">32.5</td><td class="col-test">31.2</td></tr>
+<tr><td class="k-cell">1000</td><td class="col-dev">49.0</td><td class="col-dev">45.8</td><td class="col-dev">49.0</td><td class="col-dev">32.6</td><td class="col-test">31.1</td><td class="col-test">32.9</td><td class="col-test">31.6</td><td class="col-test">30.6</td></tr>
+</tbody>
+<tbody>
+<tr><td rowspan="4" class="model-cell">Qwen2.5-Omni<br><span class="baseline-note">Baseline: 15.3 / 7.6</span></td><td class="k-cell">50</td><td class="col-dev">18.4</td><td class="col-dev">34.7</td><td class="col-dev"><strong>35.8</strong></td><td class="col-dev">31.1</td><td class="col-test">8.6</td><td class="col-test">11.9</td><td class="col-test"><span class="selected">29.0<sup>†</sup></span></td><td class="col-test">32.2</td></tr>
+<tr><td class="k-cell">100</td><td class="col-dev">13.7</td><td class="col-dev">33.7</td><td class="col-dev">33.2</td><td class="col-dev">33.2</td><td class="col-test">8.9</td><td class="col-test">18.9</td><td class="col-test"><strong>30.5</strong></td><td class="col-test">30.4</td></tr>
+<tr><td class="k-cell">200</td><td class="col-dev">15.8</td><td class="col-dev">35.3</td><td class="col-dev">30.5</td><td class="col-dev">26.3</td><td class="col-test">8.3</td><td class="col-test">23.9</td><td class="col-test">30.1</td><td class="col-test">29.4</td></tr>
+<tr><td class="k-cell">1000</td><td class="col-dev">22.1</td><td class="col-dev">35.3</td><td class="col-dev">32.1</td><td class="col-dev">27.4</td><td class="col-test">7.8</td><td class="col-test">29.2</td><td class="col-test">29.4</td><td class="col-test">29.5</td></tr>
+</tbody>
+<tbody>
+<tr><td rowspan="4" class="model-cell">Kimi-Audio<br><span class="baseline-note">Baseline: −14.7 / 21.2</span></td><td class="k-cell">50</td><td class="col-dev">−13.7</td><td class="col-dev">−13.7</td><td class="col-dev">−1.6</td><td class="col-dev">−9.5</td><td class="col-test">21.3</td><td class="col-test">20.6</td><td class="col-test">21.3</td><td class="col-test">24.6</td></tr>
+<tr><td class="k-cell">100</td><td class="col-dev">−21.1</td><td class="col-dev">−6.3</td><td class="col-dev">−7.9</td><td class="col-dev">−4.2</td><td class="col-test">21.1</td><td class="col-test">15.1</td><td class="col-test">29.9</td><td class="col-test">28.4</td></tr>
+<tr><td class="k-cell">200</td><td class="col-dev">−21.6</td><td class="col-dev">0.0</td><td class="col-dev"><strong>6.8</strong></td><td class="col-dev">−6.8</td><td class="col-test">20.3</td><td class="col-test">27.8</td><td class="col-test"><span class="selected"><strong>30.9</strong><sup>†</sup></span></td><td class="col-test">29.2</td></tr>
+<tr><td class="k-cell">1000</td><td class="col-dev">−14.2</td><td class="col-dev">−9.5</td><td class="col-dev">−14.7</td><td class="col-dev">−36.3</td><td class="col-test">11.8</td><td class="col-test">27.7</td><td class="col-test">27.8</td><td class="col-test">27.2</td></tr>
+</tbody>
+</table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reference ablation -->
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Reference Ablation</h2>
+        <div class="content">
+          <ul>
+            <li>Gaussian noise, silence and SNR −20 dB noisy audio perform similarly: all three carry little of the source clip.</li>
+            <li>As the reference keeps more of the source (higher SNR), accuracy drops on AF3 (38.3% → 21.9%) and Qwen2.5 (29.3% → 10.8%). Shared content cancels out in Eq. (1), giving a noisier estimate of which neurons are acoustic. Kimi stays within 28–31%.</li>
+            <li>Even a suboptimal reference keeps IAAN above baseline on AF3 and Qwen2.5.</li>
+          </ul>
+        </div>
+        <p class="table-title"><strong>Table III.</strong> Reference ablation on VoxParadox (Acc and ALA, %). <strong>Bold</strong> / <u>underline</u>: best / second-best per column.</p>
+        <div class="table-container">
+<table class="table is-narrow paper-table t3">
+<thead><tr><th rowspan="2">Reference type</th><th colspan="2">Audio-Flamingo-3</th><th colspan="2">Qwen2.5-Omni</th><th colspan="2">Kimi-Audio</th></tr>
+<tr><th>Acc ↑</th><th>ALA ↓</th><th>Acc ↑</th><th>ALA ↓</th><th>Acc ↑</th><th>ALA ↓</th></tr></thead><tbody>
+<tr class="baseline-row"><td><em>Baseline (unamplified)</em></td><td>13.1</td><td>75.5</td><td>7.6</td><td>76.9</td><td>21.2</td><td>64.0</td></tr>
+<tr class="ours"><td>Gaussian noise (default)</td><td><u>38.8</u></td><td>40.5</td><td><u>29.0</u></td><td><strong>48.1</strong></td><td><strong>30.9</strong></td><td>43.0</td></tr>
+<tr class=""><td>Blank (silence)</td><td><strong>39.4</strong></td><td><strong>38.1</strong></td><td>28.1</td><td><u>49.2</u></td><td>28.1</td><td><strong>42.3</strong></td></tr>
+<tr class=""><td>Noisy SNR −20 dB</td><td>38.3</td><td><u>39.1</u></td><td><strong>29.3</strong></td><td><strong>48.1</strong></td><td>29.7</td><td><u>42.7</u></td></tr>
+<tr class=""><td>Noisy SNR −10 dB</td><td>29.1</td><td>50.1</td><td>24.6</td><td>49.6</td><td>28.4</td><td>43.4</td></tr>
+<tr class=""><td>Noisy SNR 0 dB</td><td>19.5</td><td>63.7</td><td>14.3</td><td>68.1</td><td>28.5</td><td>43.9</td></tr>
+<tr class=""><td>Noisy SNR +10 dB</td><td>18.3</td><td>65.9</td><td>12.4</td><td>72.7</td><td>28.1</td><td>44.7</td></tr>
+<tr class=""><td>Noisy SNR +20 dB</td><td>21.9</td><td>62.7</td><td>10.8</td><td>73.6</td><td><u>30.6</u></td><td>43.7</td></tr>
+</tbody></table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Analysis -->
+  <section class="hero is-small is-light">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Analysis</h2>
+        <h3 class="title is-5">Acoustic neurons are a sparse tail, near the encoder output</h3>
+        <div class="content">
+          <p>Most neurons respond almost identically to real audio and noise, so their scores cluster tightly at zero. Only a small tail breaks away. On AF3, the K = 50 threshold (<i>s<sub>i</sub></i> = 0.40) sits about <strong>13 standard deviations</strong> above the mean. Selected neurons are concentrated in the encoder's last layer for AF3 and Qwen2.5, and spread more widely for Kimi, though its last layer still holds the largest share.</p>
+        </div>
+        <div class="columns is-variable is-4">
+          <div class="column">
+            <figure class="paper-figure">
+              <img src="static/images/fig2a_score_distribution.png" alt="Histogram of acoustic scores over AF3 neurons on a log scale, sharply peaked at zero, with a dotted line at the K=50 threshold of 0.40." width="1600" height="479" loading="lazy">
+              <figcaption>(a) Acoustic-score distribution over AF3 neurons; the red dashed line marks the selection threshold.</figcaption>
+            </figure>
+          </div>
+          <div class="column">
+            <figure class="paper-figure">
+              <img src="static/images/fig2b_layer_localization.png" alt="Bar chart of the share of selected neurons per encoder layer. AF3 has about 90% and Qwen2.5 about 56% in layer 31; Kimi-Audio is spread across layers with about 23% in layer 31." width="1600" height="542" loading="lazy">
+              <figcaption>(b) Share of selected neurons in each audio encoder layer.</figcaption>
+            </figure>
+          </div>
+        </div>
+        <p class="figure-caption has-text-centered"><strong>Fig. 2.</strong> Acoustic-score distribution and layer localization, averaged over all test examples.</p>
+
+        <h3 class="title is-5 analysis-sub">Which neurons are selected drives the gain</h3>
+        <div class="content">
+          <ul>
+            <li><strong>Random</strong> neurons with the same budget give only a small improvement. The gain comes from the acoustic score, not from amplifying the same number of neurons.</li>
+            <li><strong>Layer-amplify</strong> scales every neuron in the layer where IAAN's picks concentrate, and stays at baseline.</li>
+            <li><strong>IAAN (Layer-restricted)</strong> recovers the full gain on Qwen2.5 and most of it on AF3, but falls below baseline on Kimi, whose acoustic neurons are spread across layers. Searching the full encoder is necessary.</li>
+          </ul>
+        </div>
+        <p class="table-title"><strong>Table IV.</strong> VoxParadox Acc and ALA (%) for controls on neuron selection. <strong>Bold</strong>: best per column.</p>
+        <div class="table-container">
+<table class="table is-narrow paper-table t4">
+<thead><tr><th rowspan="2">Method</th><th colspan="2">Audio-Flamingo-3</th><th colspan="2">Qwen2.5-Omni</th><th colspan="2">Kimi-Audio</th></tr>
+<tr><th>Acc ↑</th><th>ALA ↓</th><th>Acc ↑</th><th>ALA ↓</th><th>Acc ↑</th><th>ALA ↓</th></tr></thead><tbody>
+<tr class="baseline-row"><td><em>Baseline (unamplified)</em></td><td>13.1</td><td>75.5</td><td>7.6</td><td>76.9</td><td>21.2</td><td>64.0</td></tr>
+<tr class=""><td>Random</td><td>13.2</td><td>75.3</td><td>7.8</td><td>76.6</td><td>24.6</td><td>60.3</td></tr>
+<tr class=""><td>Layer-amplify</td><td>12.4</td><td>76.7</td><td>7.8</td><td>77.0</td><td>21.5</td><td>63.9</td></tr>
+<tr class="ours"><td>IAAN (Layer-restricted)</td><td>37.2</td><td>41.1</td><td><strong>29.0</strong></td><td><strong>48.1</strong></td><td>20.7</td><td>62.8</td></tr>
+<tr class="ours"><td>IAAN</td><td><strong>38.8</strong></td><td><strong>40.5</strong></td><td><strong>29.0</strong></td><td><strong>48.1</strong></td><td><strong>30.9</strong></td><td><strong>43.0</strong></td></tr>
+</tbody></table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Qualitative -->
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Qualitative Examples</h2>
+        <p class="subtitle has-text-centered">Asked to describe the voice freely, AF3 with IAAN reports the attributes actually present instead of echoing the words (Table V).</p>
+<div class="qual-grid">
+<div class="qual-card">
+  <div class="qual-head"><span class="qual-attr">Gender</span></div>
+  <p class="qual-input"><span class="qual-label">Spoken content</span>“As a female, I feel empowered to share my story.”</p>
+  <p class="qual-tags"><span class="tag-truth"><i class="fas fa-check"></i> Voice: male</span><span class="tag-adv"><i class="fas fa-times"></i> Adversarial: female</span></p>
+  <div class="qual-out bad"><span class="qual-label">Baseline (unamplified)</span><p>✗ “The speaker is a young adult female with a high-pitched, confident, and assertive voice. She sounds empowered and self-assured, with a clear and steady tone that conveys strength and determination.”</p></div>
+  <div class="qual-out good"><span class="qual-label">IAAN</span><p>✓ “The speaker is a young male with a high-pitched, angry voice, speaking in a flat, monotone manner.”</p></div>
+</div>
+<div class="qual-card">
+  <div class="qual-head"><span class="qual-attr">Emotion</span></div>
+  <p class="qual-input"><span class="qual-label">Spoken content</span>“Right now, my heart is calm and steady.”</p>
+  <p class="qual-tags"><span class="tag-truth"><i class="fas fa-check"></i> Voice: angry</span><span class="tag-adv"><i class="fas fa-times"></i> Adversarial: neutral</span></p>
+  <div class="qual-out bad"><span class="qual-label">Baseline (unamplified)</span><p>✗ “The speaker in this audio is a female with a calm and steady voice.”</p></div>
+  <div class="qual-out good"><span class="qual-label">IAAN</span><p>✓ “The speaker in this audio is a young male with a high-pitched, slightly nasal voice. He sounds slightly annoyed and impatient, and his voice is quite monotone.”</p></div>
+</div>
+<div class="qual-card">
+  <div class="qual-head"><span class="qual-attr">Speaker count</span></div>
+  <p class="qual-input"><span class="qual-label">Spoken content</span>“I am alone in this discussion. Yes, absolutely. Just one person.”</p>
+  <p class="qual-tags"><span class="tag-truth"><i class="fas fa-check"></i> Voice: two speakers</span><span class="tag-adv"><i class="fas fa-times"></i> Adversarial: one</span></p>
+  <div class="qual-out bad"><span class="qual-label">Baseline (unamplified)</span><p>✗ “I hear one person speaking in this audio. The speaker is a male with a deep voice.”</p></div>
+  <div class="qual-out good"><span class="qual-label">IAAN</span><p>✓ “I hear two distinct speakers in this audio. One is a male voice speaking in a deep, resonant tone, and the other is a female voice speaking in a higher, more melodic tone.”</p></div>
+</div>
+</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conclusion -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Conclusion</h2>
+          <div class="content has-text-justified">
+            <p>IAAN modifies at most 0.12% of the audio encoder's neurons, yet improves average accuracy by 9.7 to 25.7 points across three open-source LALMs, with gains spread across attributes rather than concentrated in a few. Controlled experiments confirm that both the encoder locus and the selectivity of the neuron set are essential. The audio encoder's individual neurons are an effective and largely untapped site for inference-time intervention.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Reproduce -->
-  <section class="hero is-small is-light">
+  <section class="hero is-small">
     <div class="hero-body">
       <div class="container is-max-desktop">
         <h2 class="title is-3 has-text-centered">Reproduce the Main Table</h2>
