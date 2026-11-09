@@ -73,3 +73,13 @@
 .content ol.ref-list li:target { background: #fdf2f8; border-radius: 4px; }
 html { scroll-padding-top: 1.5rem; }
 .hero.is-light .content p, .hero.is-light .content li { color: var(--text-primary); }
+
+/* Larger body text */
+main .content > p:not(.refs-note):not(.equation),
+main .content > ul > li,
+main .content > ol.findings > li { font-size: 1.125rem; line-height: 1.75; }
+@media (max-width: 768px) {
+  main .content > p:not(.refs-note):not(.equation),
+  main .content > ul > li,
+  main .content > ol.findings > li { font-size: 1.0625rem; }
+}
