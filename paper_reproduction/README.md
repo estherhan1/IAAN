@@ -7,9 +7,9 @@ Yu-Han Huang, Chih-Kai Yang, Ke-Han Lu, An-Yu Cheng, Hung-yi Lee · IEEE SLT 202
 
 [Benchmark (VoxParadox)](https://voxparadox.github.io/) · [Benchmark code](https://github.com/ihp-lab/VoxParadox) · [Dataset](https://huggingface.co/datasets/IHP-Lab/VoxParadox)
 
-**Status: command-line interface implemented, complete paper reproduction not yet runnable** without the original model-specific official greedy-generation runners and VoxParadox dataset. All changes are in this draft branch; Steer-CD originals remain untouched.
+**Status: command-line interface implemented, complete paper reproduction not yet runnable** without the original model-specific official greedy-generation runners and VoxParadox dataset. These changes are now on the main branch; the archived Steer-CD experiments remain untouched.
 
-## One-line invocation
+## CLI usage (requires external original model runners; not standalone)
 
 Run from the repository root:
 
