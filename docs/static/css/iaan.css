@@ -12,11 +12,7 @@
 .teaser .subtitle { margin-top: 1.5rem; font-size: 1rem; line-height: 1.6; color: var(--text-secondary); }
 .teaser .subtitle strong { color: var(--text-primary); }
 
-/* Method */
-.method-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
-.method-step { background: var(--background-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 1.25rem; position: relative; box-shadow: var(--shadow-sm); }
-.method-step h3 { font-size: 1.05rem !important; font-weight: 700; margin: .2rem 0 .6rem !important; color: var(--text-primary); }
-.method-step p { font-size: .92rem; color: var(--text-secondary); margin-bottom: .6rem !important; }
+/* Overview */
 .equation { text-align: center; font-family: 'Times New Roman', Georgia, serif; font-size: 1.1rem !important; color: var(--text-primary) !important; background: var(--background-secondary); border-radius: 8px; padding: .6rem .4rem; position: relative; }
 
 /* Paper tables */
@@ -96,3 +92,6 @@
 .content h3.title.is-5 { margin-top: 1.5rem; margin-bottom: .5rem; }
 .content h3.title.is-5:first-child { margin-top: 0; }
 .teaser .paper-figure { max-width: 680px; margin: 0 auto; }
+.content p.lead-gap { margin-top: 3rem; }
+.content .equation { margin: 1rem auto; max-width: 560px; }
+.title-icon { height: 1.05em; width: auto; vertical-align: -0.17em; margin-right: .35em; border-radius: 22%; }

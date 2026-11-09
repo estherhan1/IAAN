@@ -15,7 +15,9 @@
   <link rel="canonical" href="https://estherhan1.github.io/IAAN/">
   <meta name="theme-color" content="#2563eb">
 
+  <link rel="icon" type="image/svg+xml" href="static/images/iaan_icon.svg">
   <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link rel="apple-touch-icon" href="static/images/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="static/css/bulma.min.css">
@@ -39,7 +41,7 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">Enhancing How Large Audio-Language Models Hear: Identifying and Amplifying Acoustic Neurons in the Audio Encoder</h1>
+            <h1 class="title is-1 publication-title"><img class="title-icon" src="static/images/iaan_icon.svg" alt="" width="64" height="64">Enhancing How Large Audio-Language Models Hear: Identifying and Amplifying Acoustic Neurons in the Audio Encoder</h1>
             <div class="is-size-5 publication-authors">
               <span class="author-block">Yu-Han Huang<sup>1,4</sup>,</span>
               <span class="author-block">Chih-Kai Yang<sup>2,*</sup>,</span>
@@ -113,67 +115,28 @@
     </div>
   </section>
 
-  <!-- III. IAAN -->
-  <section class="hero is-small">
-    <div class="hero-body">
-      <div class="container is-max-desktop">
-        <h2 class="title is-3 has-text-centered">IAAN: Identifying and Amplifying Acoustic Neurons</h2>
-        <div class="content">
-          <p>A neuron that encodes a genuine acoustic attribute should respond more strongly to real audio than to a reference clip of unstructured noise, which carries no such attribute. IAAN runs the audio encoder on both inputs, contrasts each feed-forward neuron's activation to obtain an acoustic score, and amplifies the top-scoring neurons at inference. The score is computed on the fly per clip, so no training or attribute labels are needed.</p>
-        </div>
-        <div class="method-steps">
-          <div class="method-step">
-            <h3>Preliminary: Feed-Forward Neurons</h3>
-            <p>A transformer block's feed-forward network computes FFN(<i>h</i>) = W<sub>2</sub> ϕ(W<sub>1</sub><i>h</i>). Each coordinate <i>a<sub>i</sub></i> = ϕ(W<sub>1</sub><i>h</i>)<sub><i>i</i></sub> of the hidden activation is one neuron, and <i>a<sub>i</sub></i>(<i>t</i>) denotes its activation at frame <i>t</i>.</p>
-          </div>
-          <div class="method-step">
-            <h3>Acoustic Score</h3>
-            <p>The reference <i>r</i> is Gaussian noise matching the real clip <i>x</i> in length, mean and variance. Each neuron is scored by</p>
-            <p class="equation"><i>s<sub>i</sub></i> = mean<sub><i>t</i></sub> <i>a<sub>i</sub></i><sup>real</sup>(<i>t</i>) − mean<sub><i>t</i></sub> <i>a<sub>i</sub></i><sup>ref</sup>(<i>t</i>)</p>
-            <p>A large positive score marks a neuron that responds more to the real audio than to its noise reference.</p>
-          </div>
-          <div class="method-step">
-            <h3>Selection and Amplification</h3>
-            <p>The top-K neurons by score (the neuron budget) form the amplification set S. During the encoder pass on the real audio, a forward hook scales them by a gain <i>g</i> &gt; 1:</p>
-            <p class="equation"><i>a<sub>i</sub></i> ← <i>g</i> · <i>a<sub>i</sub></i>, &nbsp; <i>i</i> ∈ S</p>
-            <p>Only extra encoder passes are added. The encoder is an order of magnitude smaller than the language model, and no extra decoding is needed.</p>
-          </div>
-        </div>
-      </div>
+  <!-- Overview -->
+  <section class="section">
+    <div class="container is-max-desktop content">
+      <h2 class="title is-3 has-text-centered">Overview</h2>
+      <p><strong>Motivation.</strong> LALMs handle what is said far better than how it is said. Most inference-time fixes act after the audio encoder, at the decoding side or inside the language model, and at a coarse granularity. Yet the encoder is where acoustic information is first extracted from the waveform. IAAN therefore intervenes inside the encoder, at the level of individual feed-forward neurons.</p>
+      <p><strong>Acoustic Score.</strong> A neuron that encodes a genuine acoustic attribute should respond more strongly to real audio than to unstructured noise. IAAN runs the encoder on the real clip <i>x</i> and on a Gaussian-noise reference <i>r</i> with matching length, mean and variance. It then scores each neuron by the difference in its mean activation:</p>
+      <p class="equation"><i>s<sub>i</sub></i> = mean<sub><i>t</i></sub> <i>a<sub>i</sub></i><sup>real</sup>(<i>t</i>) − mean<sub><i>t</i></sub> <i>a<sub>i</sub></i><sup>ref</sup>(<i>t</i>)</p>
+      <p><strong>Selection and Amplification.</strong> The top-K neurons by score form the amplification set S. During the encoder pass on the real audio, a forward hook scales them by a gain <i>g</i> &gt; 1, and the encoder output then goes to the language model as usual:</p>
+      <p class="equation"><i>a<sub>i</sub></i> ← <i>g</i> · <i>a<sub>i</sub></i>, &nbsp; <i>i</i> ∈ S</p>
+      <p>The score is computed per clip, so IAAN needs no training, attribute labels or calibration set. It only adds encoder passes, which are cheap next to the language model.</p>
+      <p><strong>Experimental Setup.</strong> IAAN is applied to Audio-Flamingo-3, Qwen2.5-Omni, Kimi-Audio and the acoustically fine-tuned AF3-PD. Evaluation uses <a href="https://huggingface.co/datasets/IHP-Lab/VoxParadox" target="_blank">VoxParadox</a>, where the voice carries one attribute and the spoken words imply another, the <em>adversarial label</em>. We report accuracy (Acc ↑) and adversarial-label agreement (ALA ↓). (K, g) is tuned on a held-out LISTEN development set by maximizing LA = Acc − ALA. Baselines intervene at other loci: audio-aware decoding (AAD), LLM-amplify and encoder hidden-state steering (HS-steer).</p>
     </div>
   </section>
 
-  <!-- IV. Experimental Setup -->
-  <section class="hero is-small is-light">
-    <div class="hero-body">
-      <div class="container is-max-desktop">
-        <h2 class="title is-3 has-text-centered">Experimental Setup</h2>
-        <div class="content">
-          <h3 class="title is-5">Models and Benchmark</h3>
-          <p>IAAN is applied to three open-source LALMs (Audio-Flamingo-3, Qwen2.5-Omni and Kimi-Audio) and to AF3-PD, a model fine-tuned to rely on acoustic evidence. GPT-4o Audio and Gemini 2.5 Flash are included for context without intervention. Evaluation uses <a href="https://huggingface.co/datasets/IHP-Lab/VoxParadox" target="_blank">VoxParadox</a>, a benchmark of non-semantic speech attributes in which the voice carries one attribute while the spoken words imply another (the <em>adversarial label</em>). Answering correctly therefore requires listening rather than reading the transcript.</p>
-          <h3 class="title is-5">Metrics</h3>
-          <p>Accuracy (Acc ↑) and adversarial-label agreement (ALA ↓), the fraction of items where the model picks the label implied by the words. Better acoustic understanding should raise Acc and lower ALA together.</p>
-          <h3 class="title is-5">Hyperparameter Selection</h3>
-          <p>To keep VoxParadox held out, (K, g) is tuned on sarcastic-speech clips from LISTEN by maximizing the listening advantage LA = Acc − ALA. All reported IAAN results use these development-set choices, not an oracle sweep over the test set.</p>
-          <h3 class="title is-5">Compared Methods</h3>
-          <p>Audio-aware decoding (AAD) contrasts output logits with and without audio. LLM-amplify applies IAAN's acoustic-rank criterion to language-model neurons. HS-steer is dense hidden-state steering applied to the encoder layer where IAAN's selected neurons concentrate.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- Results -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop content">
+      <h2 class="title is-3 has-text-centered">Results</h2>
 
-  <!-- V. Results -->
-  <section class="hero is-small">
-    <div class="hero-body">
-      <div class="container is-max-desktop">
-        <h2 class="title is-3 has-text-centered">Results</h2>
-
-        <h3 class="title is-5">Main Results</h3>
-        <div class="content">
-          <p>IAAN consistently raises accuracy and lowers ALA on all three open-source LALMs. With IAAN, they surpass the proprietary systems on both metrics, and the gains hold across most attributes rather than a few. IAAN also improves AF3-PD, which is already fine-tuned for acoustic grounding. The largest gain there is on intonation, the attribute it still struggles with, so the encoder-side signal complements what such training supplies.</p>
-        </div>
-        <p class="table-title"><strong>Table I.</strong> Accuracy (%) and adversarial-label agreement (ALA, %) on VoxParadox. †: baseline reported by VoxParadox; <em>reproduced</em>: our unamplified baseline under the official protocol. <strong>Bold</strong>: best per column within each model's block. Spk ID = speaker identity, Spk Cnt = speaker counting, Range = vocal range.</p>
-        <div class="table-container">
+      <p><strong>Main Results.</strong> (1) IAAN consistently raises accuracy and lowers ALA on all three open-source LALMs, and the gains hold across most attributes rather than a few. (2) With IAAN, all three surpass the proprietary systems on both metrics. (3) IAAN still improves AF3-PD, a model already fine-tuned to rely on acoustic evidence, most clearly on intonation. This shows the encoder-side signal complements such training.</p>
+      <p class="table-title"><strong>Table I.</strong> Accuracy (%) and adversarial-label agreement (ALA, %) on VoxParadox. †: baseline reported by VoxParadox; <em>reproduced</em>: our unamplified baseline under the official protocol. <strong>Bold</strong>: best per column within each model's block. Spk ID = speaker identity, Spk Cnt = speaker counting, Range = vocal range.</p>
+      <div class="table-container">
 <table class="table is-narrow paper-table t1">
 <thead><tr><th>Model</th>
 <th class="">Age</th>
@@ -222,10 +185,9 @@
 <tr class=""><td>Gemini 2.5 Flash<sup>†</sup></td><td class="">15.0</td><td class="">14.5</td><td class="">6.0</td><td class="">19.0</td><td class="">31.0</td><td class="">16.0</td><td class="">13.0</td><td class="">19.0</td><td class="">21.0</td><td class="">92.5</td><td class="col-avg">24.7</td><td class="col-ala">60.5</td></tr>
 </tbody>
 </table>
-        </div>
+      </div>
 
-        <h3 class="title is-5 analysis-sub">Locus and Granularity Comparison</h3>
-        <p class="matrix-lead">Each compared method changes one factor relative to IAAN: <strong>where</strong> it intervenes (locus) or <strong>how finely</strong> it acts (granularity).</p>
+      <p class="lead-gap"><strong>Locus and Granularity Comparison.</strong> (1) Acting after the encoder fails: contrasting logits (AAD) or amplifying language-model neurons (LLM-amplify) leaves accuracy near baseline. (2) Acting at the right locus is not enough: dense steering inside the encoder (HS-steer) gives only modest or mixed gains. (3) Only IAAN, which is inside the encoder and works on sparse neurons, consistently yields more acoustically grounded predictions.</p>
         <div class="locus-matrix" role="table" aria-label="Methods by intervention locus and granularity">
           <div class="lm-corner" role="columnheader"><span>Locus ↓</span><span>Granularity →</span></div>
           <div class="lm-colhead" role="columnheader">Coarse / dense<small>logits or a whole-layer direction</small></div>
@@ -257,12 +219,9 @@
         </div>
         <p class="figure-caption has-text-centered">Right locus <em>and</em> right granularity are both needed; numbers are in Table I.</p>
 
-        <h3 class="title is-5 analysis-sub">Hyperparameter Sensitivity</h3>
-        <div class="content">
-          <p>Sensitivity is model-dependent. Audio-Flamingo-3 stays above baseline everywhere, while Kimi-Audio has some configurations below it. Most configurations beat the unamplified baseline, so the choice affects how much IAAN helps rather than whether it helps. Configurations chosen on the development set transfer well to VoxParadox.</p>
-        </div>
-        <p class="table-title"><strong>Table II.</strong> Sweep over neuron budget K and gain g. Left: LA = Acc − ALA on the LISTEN development set; right: Acc on VoxParadox. <strong>Bold</strong>: best per model per dataset; †: configuration selected by maximizing development-set LA.</p>
-        <div class="table-container">
+      <p class="lead-gap"><strong>Hyperparameter Sensitivity.</strong> Sensitivity is model-dependent, but most (K, g) configurations beat the unamplified baseline. The choice affects how much IAAN helps rather than whether it helps, and configurations chosen on the development set transfer well to VoxParadox.</p>
+      <p class="table-title"><strong>Table II.</strong> Sweep over neuron budget K and gain g. Left: LA = Acc − ALA on the LISTEN development set; right: Acc on VoxParadox. <strong>Bold</strong>: best per model per dataset; †: configuration selected by maximizing development-set LA.</p>
+      <div class="table-container">
 <table class="table is-narrow paper-table t2">
 <thead><tr><th rowspan="2">Model</th><th rowspan="2">K</th><th colspan="4" class="col-dev">LISTEN dev — LA (%) ↑</th><th colspan="4" class="col-test">VoxParadox test — Acc (%) ↑</th></tr>
 <tr><th class="col-dev">g=4</th><th class="col-dev">g=8</th><th class="col-dev">g=12</th><th class="col-dev">g=16</th><th class="col-test">g=4</th><th class="col-test">g=8</th><th class="col-test">g=12</th><th class="col-test">g=16</th></tr></thead>
@@ -285,14 +244,11 @@
 <tr><td class="k-cell">1000</td><td class="col-dev">−14.2</td><td class="col-dev">−9.5</td><td class="col-dev">−14.7</td><td class="col-dev">−36.3</td><td class="col-test">11.8</td><td class="col-test">27.7</td><td class="col-test">27.8</td><td class="col-test">27.2</td></tr>
 </tbody>
 </table>
-        </div>
+      </div>
 
-        <h3 class="title is-5 analysis-sub">Reference Ablation</h3>
-        <div class="content">
-          <p>Gaussian noise, silence and heavily noised audio perform similarly, since none carries much of the source clip. As the reference keeps more of the source, performance drops on Audio-Flamingo-3 and Qwen2.5-Omni, because shared content cancels out of the contrast and leaves a noisier neuron score. Kimi-Audio is less sensitive. Even a suboptimal reference reduces the gain but does not eliminate it.</p>
-        </div>
-        <p class="table-title"><strong>Table III.</strong> Reference ablation on VoxParadox (Acc and ALA, %). <strong>Bold</strong> / <u>underline</u>: best / second-best per column.</p>
-        <div class="table-container">
+      <p class="lead-gap"><strong>Reference Ablation.</strong> Gaussian noise, silence and heavily noised audio work similarly, since none carries much of the source clip. As the reference retains more of the source, shared content cancels out of the contrast and performance drops on Audio-Flamingo-3 and Qwen2.5-Omni. A suboptimal reference reduces the gain but does not eliminate it.</p>
+      <p class="table-title"><strong>Table III.</strong> Reference ablation on VoxParadox (Acc and ALA, %). <strong>Bold</strong> / <u>underline</u>: best / second-best per column.</p>
+      <div class="table-container">
 <table class="table is-narrow paper-table t3">
 <thead><tr><th rowspan="2">Reference type</th><th colspan="2">Audio-Flamingo-3</th><th colspan="2">Qwen2.5-Omni</th><th colspan="2">Kimi-Audio</th></tr>
 <tr><th>Acc ↑</th><th>ALA ↓</th><th>Acc ↑</th><th>ALA ↓</th><th>Acc ↑</th><th>ALA ↓</th></tr></thead><tbody>
@@ -305,46 +261,28 @@
 <tr class=""><td>Noisy SNR +10 dB</td><td>18.3</td><td>65.9</td><td>12.4</td><td>72.7</td><td>28.1</td><td>44.7</td></tr>
 <tr class=""><td>Noisy SNR +20 dB</td><td>21.9</td><td>62.7</td><td>10.8</td><td>73.6</td><td><u>30.6</u></td><td>43.7</td></tr>
 </tbody></table>
+      </div>
+
+      <p class="lead-gap"><strong>Acoustic Score Distribution and Neuron Localization.</strong> Most neurons respond almost identically to real audio and noise, and only a small tail breaks away, well beyond the selection threshold. The selected neurons sit mostly in the encoder's last layer for Audio-Flamingo-3 and Qwen2.5-Omni. For Kimi-Audio they are spread more widely.</p>
+      <div class="columns is-variable is-4">
+        <div class="column">
+          <figure class="paper-figure">
+            <img src="static/images/fig2a_score_distribution.png" alt="Histogram of acoustic scores over AF3 neurons on a log scale, sharply peaked at zero, with a dotted line marking the K=50 selection threshold." width="1600" height="479" loading="lazy">
+            <figcaption>(a) Acoustic-score distribution over AF3 neurons; the red dashed line marks the selection threshold.</figcaption>
+          </figure>
+        </div>
+        <div class="column">
+          <figure class="paper-figure">
+            <img src="static/images/fig2b_layer_localization.png" alt="Bar chart of the share of selected neurons per encoder layer. AF3 and Qwen2.5 are concentrated in the last layer; Kimi-Audio is spread across layers." width="1600" height="542" loading="lazy">
+            <figcaption>(b) Share of selected neurons in each audio encoder layer.</figcaption>
+          </figure>
         </div>
       </div>
-    </div>
-  </section>
+      <p class="figure-caption has-text-centered"><strong>Fig. 2.</strong> Acoustic-score distribution and layer localization, averaged over all test examples.</p>
 
-  <!-- VI. Analysis -->
-  <section class="hero is-small is-light">
-    <div class="hero-body">
-      <div class="container is-max-desktop">
-        <h2 class="title is-3 has-text-centered">Analysis</h2>
-        <h3 class="title is-5">Acoustic Score Distribution and Neuron Localization</h3>
-        <div class="content">
-          <p>Most neurons respond almost identically to real audio and noise, so the acoustic score clusters sharply around zero. Only a small tail breaks away, and the selection threshold lies well outside the majority. The selected neurons sit mostly in the encoder's last layer for Audio-Flamingo-3 and Qwen2.5-Omni. For Kimi-Audio they are spread more widely, though the last layer still holds the largest share.</p>
-        </div>
-        <div class="columns is-variable is-4">
-          <div class="column">
-            <figure class="paper-figure">
-              <img src="static/images/fig2a_score_distribution.png" alt="Histogram of acoustic scores over AF3 neurons on a log scale, sharply peaked at zero, with a dotted line marking the K=50 selection threshold." width="1600" height="479" loading="lazy">
-              <figcaption>(a) Acoustic-score distribution over AF3 neurons; the red dashed line marks the selection threshold.</figcaption>
-            </figure>
-          </div>
-          <div class="column">
-            <figure class="paper-figure">
-              <img src="static/images/fig2b_layer_localization.png" alt="Bar chart of the share of selected neurons per encoder layer. AF3 and Qwen2.5 are concentrated in the last layer; Kimi-Audio is spread across layers." width="1600" height="542" loading="lazy">
-              <figcaption>(b) Share of selected neurons in each audio encoder layer.</figcaption>
-            </figure>
-          </div>
-        </div>
-        <p class="figure-caption has-text-centered"><strong>Fig. 2.</strong> Acoustic-score distribution and layer localization, averaged over all test examples.</p>
-
-        <h3 class="title is-5 analysis-sub">Selection of the Acoustic Neurons Drives the Gain</h3>
-        <div class="content">
-          <ul>
-            <li><strong>Random</strong> selection with the same neuron budget gives only a small improvement, so the gain comes from the acoustic score itself.</li>
-            <li><strong>Layer-amplify</strong> scales every neuron in the layer where IAAN's picks concentrate and stays at baseline.</li>
-            <li><strong>IAAN (Layer-restricted)</strong> recovers most or all of the gain on Audio-Flamingo-3 and Qwen2.5-Omni. It falls short on Kimi-Audio, whose acoustic neurons are spread across layers, so searching the full encoder is necessary.</li>
-          </ul>
-        </div>
-        <p class="table-title"><strong>Table IV.</strong> VoxParadox Acc and ALA (%) for controls on neuron selection. <strong>Bold</strong>: best per column.</p>
-        <div class="table-container">
+      <p class="lead-gap"><strong>Selection of the Acoustic Neurons Drives the Gain.</strong> (1) Random neurons with the same budget barely help, so the gain comes from the acoustic score itself. (2) Amplifying the whole layer where IAAN's picks concentrate (Layer-amplify) stays at baseline. (3) Restricting selection to that layer recovers most or all of the gain on Audio-Flamingo-3 and Qwen2.5-Omni but not on Kimi-Audio, whose acoustic neurons are spread across layers. Searching the full encoder is therefore necessary.</p>
+      <p class="table-title"><strong>Table IV.</strong> VoxParadox Acc and ALA (%) for controls on neuron selection. <strong>Bold</strong>: best per column.</p>
+      <div class="table-container">
 <table class="table is-narrow paper-table t4">
 <thead><tr><th rowspan="2">Method</th><th colspan="2">Audio-Flamingo-3</th><th colspan="2">Qwen2.5-Omni</th><th colspan="2">Kimi-Audio</th></tr>
 <tr><th>Acc ↑</th><th>ALA ↓</th><th>Acc ↑</th><th>ALA ↓</th><th>Acc ↑</th><th>ALA ↓</th></tr></thead><tbody>
@@ -354,12 +292,9 @@
 <tr class="ours"><td>IAAN (Layer-restricted)</td><td>37.2</td><td>41.1</td><td><strong>29.0</strong></td><td><strong>48.1</strong></td><td>20.7</td><td>62.8</td></tr>
 <tr class="ours"><td>IAAN</td><td><strong>38.8</strong></td><td><strong>40.5</strong></td><td><strong>29.0</strong></td><td><strong>48.1</strong></td><td><strong>30.9</strong></td><td><strong>43.0</strong></td></tr>
 </tbody></table>
-        </div>
+      </div>
 
-        <h3 class="title is-5 analysis-sub">Qualitative Results</h3>
-        <div class="content">
-          <p>In free-text descriptions, the baseline often misdescribes gender, emotion and speaker count by following the spoken words. With IAAN, the descriptions match the actual voice more often (Table V, Audio-Flamingo-3).</p>
-        </div>
+      <p class="lead-gap"><strong>Qualitative Results.</strong> When asked to describe the voice freely, the baseline often follows the spoken words. With IAAN, Audio-Flamingo-3 reports the gender, emotion and speaker count actually present in the audio (Table V).</p>
 <div class="qual-grid">
 <div class="qual-card">
   <div class="qual-head"><span class="qual-attr">Gender</span></div>
@@ -383,26 +318,11 @@
   <div class="qual-out good"><span class="qual-label">IAAN</span><p>✓ “I hear two distinct speakers in this audio. One is a male voice speaking in a deep, resonant tone, and the other is a female voice speaking in a higher, more melodic tone.”</p></div>
 </div>
 </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- VII. Conclusion -->
-  <section class="section hero">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Conclusion</h2>
-          <div class="content has-text-justified">
-            <p>IAAN is a training-free and label-free method that improves acoustic understanding in large audio-language models by intervening inside the audio encoder. It scores each neuron by how much more it responds to the real waveform than to a noise reference, then amplifies a small set of the highest-scoring neurons at inference. Across three open-source LALMs, amplifying only a tiny fraction of encoder neurons yields broad accuracy gains. Controlled experiments confirm that both the encoder locus and the selectivity of the neuron set are essential. The audio encoder's individual neurons are an effective and largely untapped site for inference-time intervention.</p>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 
   <!-- Reproduce -->
-  <section class="hero is-small is-light">
+  <section class="hero is-small">
     <div class="hero-body">
       <div class="container is-max-desktop">
         <h2 class="title is-3 has-text-centered">Reproduce the Main Table</h2>
@@ -418,7 +338,7 @@ bash reproduce_main_table.sh --model af3,kimi --tasks pitch,speed --k 100 --gain
   </section>
 
   <!-- BibTeX -->
-  <section class="section" id="BibTeX">
+  <section class="section hero is-light" id="BibTeX">
     <div class="container is-max-desktop content">
       <div class="bibtex-header">
         <h2 class="title">BibTeX</h2>
