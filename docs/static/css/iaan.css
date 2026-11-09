@@ -83,3 +83,10 @@ main .content > ol.findings > li { font-size: 1.125rem; line-height: 1.75; }
   main .content > ul > li,
   main .content > ol.findings > li { font-size: 1.0625rem; }
 }
+
+/* Sub-headings on their own line */
+.content h3.sub-head { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 1.75rem 0 .5rem; }
+.content h3.sub-head.gap { margin-top: 3rem; }
+.content h2 + h3.sub-head { margin-top: .5rem; }
+.content h3.sub-head + ol.findings { margin-top: .25rem; }
+.content p.equation { font-size: 1.3rem !important; }
