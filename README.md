@@ -8,9 +8,13 @@
 
 Yu-Han Huang · Chih-Kai Yang · Ke-Han Lu · An-Yu Cheng · Hung-yi Lee
 
-[**Paper**](https://arxiv.org/abs/2607.11801) · [**OpenReview**](https://openreview.net/forum?id=aZaFtJs6dr) · [**Project Page source**](docs/index.html) · [**VoxParadox**](https://huggingface.co/datasets/IHP-Lab/VoxParadox)
+[**Paper**](https://arxiv.org/abs/2607.11801) · [**Project Page (source)**](docs/index.html) · [**VoxParadox**](https://huggingface.co/datasets/IHP-Lab/VoxParadox)
 
 </div>
+
+## Project page
+
+The [IAAN academic project page](docs/index.html) is included in this repository under `docs/`. To publish it as a live website, enable **GitHub Pages** in **Settings → Pages → Build and deployment → Source: GitHub Actions**. The deployment workflow is at [`.github/workflows/pages.yml`](.github/workflows/pages.yml). The intended URL is `https://estherhan1.github.io/IAAN/`, but **publication is not yet confirmed**. Because this repository is private, GitHub Pages may require an eligible GitHub plan; do not change repository visibility without reviewing what will become public.
 
 ## Overview
 
