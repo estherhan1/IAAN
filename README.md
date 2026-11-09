@@ -1,3 +1,22 @@
+# IAAN — Identifying and Amplifying Acoustic Neurons
+
+**Enhancing How Large Audio-Language Models Hear: Identifying and Amplifying Acoustic Neurons in the Audio Encoder**  
+Yu-Han Huang, Chih-Kai Yang, Ke-Han Lu, An-Yu Cheng, Hung-yi Lee · IEEE SLT 2026
+
+[Paper (OpenReview)](https://openreview.net/forum?id=aZaFtJs6dr) · [arXiv](https://arxiv.org/abs/2607.11801) · [PDF](https://arxiv.org/pdf/2607.11801)
+
+## Code status
+
+**The SLT 2026 reproduction code is not yet complete.** The `paper_reproduction/` directory contains the model-agnostic IAAN algorithm, a configurable command-line launcher, and a result-table generator. The original model-specific greedy-generation/evaluation runners and benchmark data are **not included**, so running `bash reproduce_main_table.sh` alone **will not reproduce Table I** yet.
+
+See [paper reproduction instructions](paper_reproduction/README.md) for supported CLI flags, paper-selected parameters and missing dependencies.
+
+The directories `0_shared/`, `1_iaan_baselines/`, `2_steer_cd/`, `3_mmau_control/`, and `run_chains/` are an archive of additional research and follow-up Steer-CD experiments. The archived README below refers to that research, **not to a complete IAAN paper release**.
+
+---
+
+## Archived Steer-CD experimental notes
+
 # Steer-CD release — IAAN steering baselines + Steer-CD across three models
 
 This folder is an organized, self-contained archive of every experiment behind the
