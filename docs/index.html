@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IAAN | Enhancing How Large Audio-Language Models Hear</title>
+  <meta name="description" content="IAAN identifies and amplifies acoustic neurons inside the audio encoder of large audio-language models, improving paralinguistic understanding without training.">
+  <meta name="keywords" content="IAAN, Audio-Language Models, Acoustic Neurons, SLT 2026, VoxParadox, Audio Flamingo 3, Qwen2.5 Omni, Kimi Audio">
+  <meta name="author" content="Yu-Han Huang, Chih-Kai Yang, Ke-Han Lu, An-Yu Cheng, Hung-yi Lee">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="IAAN: Enhancing How Large Audio-Language Models Hear">
+  <meta property="og:description" content="Training-free neuron amplification in the audio encoder improves acoustic understanding across three large audio-language models.">
+  <meta name="theme-color" content="#1e3a5f">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/iaan.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main>
+    <section class="hero is-light publication-header">
+      <div class="hero-body">
+        <div class="container is-max-desktop has-text-centered">
+          <div class="eyebrow">IEEE Spoken Language Technology Workshop · 2026</div>
+          <h1 class="title publication-title">Enhancing How Large Audio-Language Models Hear:<br><span>Identifying and Amplifying Acoustic Neurons in the Audio Encoder</span></h1>
+          <div class="author-list">
+            <span>Yu-Han Huang<sup>1,4</sup></span>
+            <span>Chih-Kai Yang<sup>2,*</sup></span>
+            <span>Ke-Han Lu<sup>2,*</sup></span>
+            <span>An-Yu Cheng<sup>1,*</sup></span>
+            <span>Hung-yi Lee<sup>3</sup></span>
+          </div>
+          <p class="affiliation"><sup>1</sup>Department of Electrical Engineering, National Taiwan University &nbsp; · &nbsp; <sup>2</sup>Graduate Institute of Communication Engineering, National Taiwan University</p>
+          <p class="affiliation"><sup>3</sup>NTU AI-CoRE &nbsp; · &nbsp; <sup>4</sup>ASUS Open Cloud Infrastructure Software Center &nbsp; · &nbsp; <sup>*</sup>Equal contribution</p>
+          <div class="publication-links">
+            <a class="button is-rounded is-dark" href="https://arxiv.org/abs/2607.11801">Paper (arXiv)</a>
+            <a class="button is-rounded is-dark" href="https://openreview.net/forum?id=aZaFtJs6dr">OpenReview</a>
+            <a class="button is-rounded is-dark" href="https://github.com/estherhan1/IAAN">Code</a>
+            <a class="button is-rounded is-dark" href="https://huggingface.co/datasets/IHP-Lab/VoxParadox">Benchmark</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section method-section" id="method">
+      <div class="container is-max-desktop">
+        <p class="section-kicker">METHOD AT A GLANCE</p>
+        <h2 class="title is-3 section-heading">Make the encoder listen more closely.</h2>
+        <p class="section-lead">IAAN identifies the small number of audio-encoder neurons that respond to real acoustic evidence and amplifies them during inference. No extra training, task labels, or calibration dataset is required.</p>
+        <div class="diagram" role="img" aria-label="Real audio and Gaussian noise reference pass through a frozen audio encoder. Neuron activations are contrasted to select top K, then selected neurons are amplified for the answer.">
+          <div class="diagram-sources">
+            <div class="source-block"><span class="source-label">REAL AUDIO</span><svg viewBox="0 0 240 70" preserveAspectRatio="none"><path d="M0 35 L10 35 L17 20 L23 48 L33 11 L40 60 L51 24 L62 44 L72 7 L82 65 L96 23 L109 39 L122 10 L132 55 L145 32 L155 43 L167 14 L178 61 L189 19 L201 47 L214 30 L230 38 L240 35" stroke="currentColor" fill="none" stroke-width="2.5"/></svg><span class="source-foot">Speech waveform</span></div>
+            <div class="source-block noise"><span class="source-label">REFERENCE</span><svg viewBox="0 0 240 70" preserveAspectRatio="none"><path d="M0 38 L5 20 L13 42 L22 28 L30 53 L38 17 L45 41 L53 29 L62 37 L70 15 L78 51 L86 31 L94 47 L103 16 L111 35 L120 27 L129 52 L138 13 L148 45 L159 22 L167 38 L177 17 L190 53 L201 24 L211 44 L221 14 L231 40 L240 29" stroke="currentColor" fill="none" stroke-width="2"/></svg><span class="source-foot">Matched Gaussian noise</span></div>
+          </div>
+          <div class="diagram-arrow"><span>↓</span></div>
+          <div class="encoder"><span class="encoder-label">FROZEN AUDIO ENCODER</span><div class="neuron-grid" aria-hidden="true"><span></span><span></span><span class="accent"></span><span></span><span></span><span></span><span class="accent"></span><span></span><span></span><span></span><span></span><span class="accent"></span><span></span><span></span><span></span><span></span><span class="accent"></span><span></span></div><span class="encoder-sub">Compare feed-forward neuron activations</span></div>
+          <div class="diagram-arrow"><span>↓</span></div>
+          <div class="method-bottom"><div><strong>01 · Score</strong><code>sᵢ = mean(aᵢ real) − mean(aᵢ noise)</code></div><div><strong>02 · Select</strong><span>Top-K acoustic neurons</span></div><div><strong>03 · Amplify</strong><code>aᵢ ← g · aᵢ</code></div></div>
+        </div>
+        <p class="figure-caption">Illustration of the method described in Section III of the paper. Only sparse encoder-side FFN activations are amplified during the final real-audio forward pass.</p>
+      </div>
+    </section>
+    <section class="section results-section" id="results"><div class="container is-max-desktop">
+      <p class="section-kicker">MAIN RESULTS</p>
+      <h2 class="title is-3 section-heading">Better acoustic grounding across models.</h2>
+      <p class="section-lead">Average accuracy on the ten VoxParadox paralinguistic tasks, using the configurations selected on the independent LISTEN development set. Higher is better.</p>
+      <div class="results-cards">
+        <div class="result-card"><div class="result-model">Audio-Flamingo-3</div><div class="result-gain">+25.7<span> points</span></div><div class="result-bar"><div class="result-before" style="width:13.1%"></div><div class="result-after" style="width:38.8%"></div></div><div class="result-numbers">13.1% <span>→</span> <strong>38.8%</strong></div></div>
+        <div class="result-card"><div class="result-model">Qwen2.5-Omni</div><div class="result-gain">+21.4<span> points</span></div><div class="result-bar"><div class="result-before" style="width:7.6%"></div><div class="result-after" style="width:29%"></div></div><div class="result-numbers">7.6% <span>→</span> <strong>29.0%</strong></div></div>
+        <div class="result-card"><div class="result-model">Kimi-Audio</div><div class="result-gain">+9.7<span> points</span></div><div class="result-bar"><div class="result-before" style="width:21.2%"></div><div class="result-after" style="width:30.9%"></div></div><div class="result-numbers">21.2% <span>→</span> <strong>30.9%</strong></div></div>
+      </div>
+      <div class="table-container"><table class="table is-fullwidth main-results"><thead><tr><th>Model</th><th>Baseline Acc ↑</th><th>IAAN Acc ↑</th><th>Baseline ALA ↓</th><th>IAAN ALA ↓</th><th>Paper K / g</th></tr></thead><tbody>
+        <tr><td>Audio-Flamingo-3</td><td>13.1</td><td><strong>38.8</strong></td><td>75.5</td><td><strong>40.5</strong></td><td>50 / 16</td></tr>
+        <tr><td>Qwen2.5-Omni</td><td>7.6</td><td><strong>29.0</strong></td><td>76.9</td><td><strong>48.1</strong></td><td>50 / 12</td></tr>
+        <tr><td>Kimi-Audio</td><td>21.2</td><td><strong>30.9</strong></td><td>64.0</td><td><strong>43.0</strong></td><td>200 / 12</td></tr>
+      </tbody></table></div><p class="figure-caption">Published results from SLT 2026, Table I. They are not automatically generated by this website.</p>
+    </div></section>
+    <section class="section" id="abstract"><div class="container is-max-desktop">
+      <p class="section-kicker">ABSTRACT</p><h2 class="title is-3 section-heading">Abstract</h2>
+      <p class="abstract-text">Large audio-language models (LALMs) often underperform on fine-grained, non-semantic attributes of speech, such as a speaker's emotion, despite strong performance on speech content. We introduce IAAN, a training-free and label-free method that scores each feed-forward neuron in the audio encoder by contrasting its activation on the real waveform with a noise reference lacking meaningful acoustic cues. IAAN then amplifies the highest-scoring neurons during inference. Across ten non-semantic speech attributes, the method improves accuracy by 25.7 points on Audio-Flamingo-3, 21.4 on Qwen2.5-Omni, and 9.7 on Kimi-Audio. Controlled experiments demonstrate that both encoder-side intervention and neuron-level selectivity are important for these gains.</p>
+    </div></section>
+    <section class="section code-section" id="code"><div class="container is-max-desktop">
+      <p class="section-kicker">REPRODUCE MAIN TABLE</p><h2 class="title is-3 section-heading">One command, configurable models and tasks.</h2>
+      <p>Use the <a href="https://github.com/estherhan1/IAAN">GitHub repository</a> to reproduce the main VoxParadox evaluation. The code is scoped to baseline versus IAAN; it does not run Steer-CD experiments.</p>
+      <pre><code>bash reproduce_main_table.sh --model qwen --tasks emotion,gender
+bash reproduce_main_table.sh --model all --tasks all
+bash reproduce_main_table.sh --model af3,kimi --tasks pitch,speed --k 100 --gain 8</code></pre>
+      <p class="figure-caption">Model weights and benchmark audio are downloaded separately. GPU support and the model-specific dependencies are required. The published scores above are reference values, not guaranteed rerun outputs.</p>
+    </div></section>
+    <section class="section citation-section" id="citation"><div class="container is-max-desktop">
+      <p class="section-kicker">REFERENCE</p><h2 class="title is-3 section-heading">BibTeX</h2>
+      <pre id="bibtex"><code>@inproceedings{huang2026iaan,
+  title={Enhancing How Large Audio-Language Models Hear: Identifying and Amplifying Acoustic Neurons in the Audio Encoder},
+  author={Huang, Yu-Han and Yang, Chih-Kai and Lu, Ke-Han and Cheng, An-Yu and Lee, Hung-yi},
+  booktitle={Proceedings of the IEEE Spoken Language Technology Workshop (SLT)},
+  year={2026}
+}</code></pre>
+      <button id="copy-bibtex" class="button is-rounded is-light" type="button">Copy BibTeX</button>
+    </div></section>
+  </main>
+  <footer class="footer"><div class="container is-max-desktop"><p>IAAN · IEEE SLT 2026 · <a href="https://github.com/estherhan1/IAAN">Source code</a></p><p class="attribution">Page adapted from <a href="https://github.com/eliahuhorwitz/Academic-project-page-template">Academic Project Page Template</a> (CC BY-SA 4.0).</p></div></footer>
+  <script>document.getElementById('copy-bibtex').addEventListener('click', async function () {const t=document.querySelector('#bibtex code').textContent;try {await navigator.clipboard.writeText(t);this.textContent='Copied!';} catch(e) {this.textContent='Select text above to copy';}});</script>
+</body></html>
