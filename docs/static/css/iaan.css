@@ -72,3 +72,4 @@
 .content ol.ref-list li::marker { content: "[" counter(list-item) "] "; color: var(--text-primary); }
 .content ol.ref-list li:target { background: #fdf2f8; border-radius: 4px; }
 html { scroll-padding-top: 1.5rem; }
+.hero.is-light .content p, .hero.is-light .content li { color: var(--text-primary); }
