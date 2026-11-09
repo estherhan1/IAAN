@@ -61,3 +61,5 @@
 .fig-teaser img { padding: .5rem; }
 .fig-teaser img { width: 100%; }
 .paper-fig figcaption { max-width: 760px; }
+#BibTeX { background: var(--background-secondary); border-top: 1px solid var(--border-color); }
+#BibTeX .container { min-width: 0; }
