@@ -1,87 +1,81 @@
-# IAAN SLT 2026 — paper-aligned reproduction work
+# IAAN SLT 2026 reproduction interface
 
-**Status: partial implementation, NOT an independently validated reproduction.**
-This directory separates the published IAAN method from the later Steer-CD work
-in the repository root. The original files are unchanged.
+**Status: command-line interface implemented, complete paper reproduction not yet runnable** without the original model-specific official greedy-generation runners and VoxParadox dataset. All changes are in this draft branch; Steer-CD originals remain untouched.
 
-Paper: *Enhancing How Large Audio-Language Models Hear: Identifying and
-Amplifying Acoustic Neurons in the Audio Encoder* (IEEE SLT 2026).
+## One-line invocation
 
-## Exact algorithm (paper Sec. III)
-
-For each audio clip independently:
-
-1. Run the audio encoder on real waveform `x` and a fixed-seed, length- and
-   moment-matched Gaussian noise reference `r`. Capture each encoder block's
-   **input to its second FFN projection** (`fc2`), after the activation function.
-2. Compute signed scores `mean_t(a_real) - mean_t(a_reference)` per neuron.
-3. Rank scores **globally across encoder layers**, select top `K`.
-4. On a new forward pass of the **real audio**, multiply only those FFN
-   neuron activations by `g > 1`. Do not modify LLM backbone activations.
-5. Use the model's *original greedy generation and answer parsing*.
-
-`iaan_core.py` implements reference generation, layer pre-hook activation
-collection, global signed top-K selection, and temporary amplification hooks.
-The module is adapter-independent and **is not** a ready-to-run inference CLI.
-
-### Quick CPU unit tests
+Run from the repository root:
 
 ```bash
-pip install torch
+# All three models, all 10 VoxParadox tasks, published paper's K/g
+bash reproduce_main_table.sh
+
+# One model, two tasks
+bash reproduce_main_table.sh --model qwen --tasks emotion,gender
+
+# Multiple models, selected tasks, manually chosen IAAN hyperparameters
+bash reproduce_main_table.sh --model af3,kimi --tasks pitch,volume,speed --k 100 --gain 8
+
+# Print the exact selection and K/g without running any model
+bash reproduce_main_table.sh --model qwen --tasks emotion --dry-run
+
+# Show all options
+bash reproduce_main_table.sh --help
+```
+
+**Published paper defaults (Table II, † selected on LISTEN):**
+
+| Model | K | gain |
+|---|---:|---:|
+| AF3 | 50 | 16 |
+| Qwen2.5-Omni | 50 | 12 |
+| Kimi-Audio | 200 | 12 |
+
+`--k` and `--gain` override defaults for every selected model.
+A subset of tasks produces a subset report, **not** the full paper Table I.
+There is **no dev sweep** or tuning stage; the paper-selected settings are
+used unless overridden.
+
+The task selectors are `age,gender,emotion,pitch,volume,speed,range,intonation,speaker_id,speaker_count`; `all` is the default.
+
+The command writes a filtered `selected_dataset.json` and expects original model
+runners to emit `baseline_report.json` and `iaan_report.json` in
+`outputs/main_table/<model>/` in the official `data/eval.py` JSON schema.
+`main_table.py` then assembles `outputs/main_table/Main_Table.md`.
+
+## Required setup — not yet included in repository
+
+The original `af3_perq_official.py`, `omni_perq_official.py`, and
+`kimi_perq_official.py` generation scripts, their model-specific dependencies,
+and the complete VoxParadox data were not found in this GitHub repository.
+The existing `2_steer_cd/` collectors compute letter logits and should not be
+silently substituted for greedy generation.
+
+1. Supply the complete VoxParadox JSON and audio files (no data bundled).
+2. Copy `paper_reproduction/main_table.env.example` to
+   `paper_reproduction/main_table.env` and set `IAAN_VOXPARADOX_JSON`,
+   `IAAN_AUDIO_BASE`, and the three `IAAN_*_CMD` environment variables.
+3. Each command must consume `IAAN_DATA_PATH`, `IAAN_K`, `IAAN_GAIN`
+   and emit official JSON reports to `IAAN_MODEL_OUTPUT_DIR`.
+4. Run one of the one-line commands above. The launcher rejects missing
+   runners and reports instead of presenting unverified results.
+
+All models run with **greedy model-specific generation**. Unamplified baseline
+is evaluated for the selected task subset, then IAAN. The signed score
+`mean(real) - mean(noise)` selects top-K neurons across the entire encoder;
+selected FFN activations are scaled by gain. No Steer-CD / contrastive decoding.
+
+The `iaan_core.py` file contains adapter-independent IAAN primitives.
+These are not full model adapters. CPU checks:
+
+```bash
 cd paper_reproduction
 python -m unittest discover -s tests -v
 ```
 
-## Original model code already present in this repo
+## Paper reference
 
-| Model | Available implementation | What is still missing |
-|---|---|---|
-| Qwen2.5-Omni | `../1_iaan_baselines/selectors/omni_perq_methods.py` (`content` selector) | External `contra_decode` modules, `run_perquestion_steering`, `omni_eval_voxparadox`, official dataset/eval, environment |
-| Audio-Flamingo-3 | `../2_steer_cd/af3/af3_steer_cd_collect.py` (`content` variant) | Original `af3_perq_official.py` greedy-generate-and-parse pipeline; file here instead collects Steer-CD letter logits |
-| Kimi-Audio | `../2_steer_cd/kimi/kimi_steer_cd_collect.py` (`content` variant) | Original `kimi_perq_official.py` greedy-generate-and-parse pipeline, portable `kimia_infer` setup; currently collects letter logits |
-| AF3-PD | No complete original IAAN inference script found | Adapter and original model-specific evaluation |
-
-**Do not** compare letter-logit Steer-CD results in `2_steer_cd/` to the
-paper's greedy-generation IAAN Table I. Results stored in this repository
-also use dev300/test700 subsets from later experiments.
-
-## Evaluation contract from SLT 2026
-
-- **Selection set:** LISTEN, 190 sarcasm speech clips reconstructed into MCQs.
-- **Tune:** neuron budget `K` and gain `g` to maximize `Acc - ALA`
-  on LISTEN, *not* on VoxParadox.
-- **Test:** all ten VoxParadox attributes, 200 MCQs per attribute (2,000
-  total); evaluate accuracy, adversarial-label agreement (ALA), and per-task
-  scores using model-specific official greedy-generation protocols.
-- **Published main averages (baseline → IAAN):** AF3 13.1 → 38.8;
-  Qwen 7.6 → 29.0; Kimi 21.2 → 30.9; AF3-PD 70.5 → 75.0.
-- **Important:** the published paper does not imply that any preexisting
-  `dev300`/`test700` result here is equivalent to the full paper evaluation.
-
-## Before claiming a reproduction
-
-1. Recover the original `*_perq_official.py` model pipelines and the
-   missing `contra_decode` modules or reimplement and audit those adapters.
-2. Pin actual tested model revisions, package versions, prompt templates,
-   random seeds, waveform preprocessing and sample-ordering conventions.
-3. Obtain permitted VoxParadox and LISTEN data and record their checksums;
-   no benchmark audio or model weights are bundled here.
-4. Implement/test the official answer parser, greedy generation, the ten
-   task aggregation, ALA, and the LISTEN hyperparameter sweep.
-5. Run all models and compare every Table I task to the paper. Document
-   deviations, not just an average.
-
-## Integration example (pseudocode for a model adapter)
-
-```python
-# layers = [block.fc2 for block in model.audio_encoder.layers]
-# real = collect_means(lambda: encode_audio(real_wave), layers)
-# noise = gaussian_reference(real_wave, seed=clip_seed)
-# ref  = collect_means(lambda: encode_audio(noise), layers)
-# selected = select_topk(real, ref, k=50)
-# with amplify_fc2_inputs(layers, selected, gain=16):
-#     answer = original_model_greedy_generate(real_wave, original_prompt)
-```
-
-These lines must be adapted to model-specific audio preprocessors and
-encoder access. For padded features, mask padded time steps when pooling.
+*Enhancing How Large Audio-Language Models Hear: Identifying and Amplifying
+Acoustic Neurons in the Audio Encoder*, IEEE SLT 2026.
+Full-test published baseline → IAAN: AF3 13.1 → 38.8; Qwen 7.6 → 29.0;
+Kimi 21.2 → 30.9. This launcher never copies those values into reports.
