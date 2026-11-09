@@ -9,38 +9,9 @@
 .paper-figure { margin: 0; background: #fff; border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: .75rem; box-shadow: var(--shadow-sm); }
 .paper-figure img { display: block; width: 100%; height: auto; }
 .paper-figure figcaption { font-size: .85rem; color: var(--text-secondary); text-align: center; margin-top: .6rem; }
-.teaser .subtitle { margin-top: 1.5rem; font-size: 1rem; line-height: 1.6; color: var(--text-secondary); }
-.teaser .subtitle strong { color: var(--text-primary); }
 
 /* Overview */
 .equation { text-align: center; font-family: 'Times New Roman', Georgia, serif; font-size: 1.1rem !important; color: var(--text-primary) !important; background: var(--background-secondary); border-radius: 8px; padding: .6rem .4rem; position: relative; }
-
-/* Paper tables */
-.table-title { font-size: .9rem; color: var(--text-secondary); margin: 1.5rem 0 .6rem; line-height: 1.55; }
-.table-title strong:first-child { color: var(--text-primary); }
-.table-container { background: var(--background-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); box-shadow: var(--shadow-sm); }
-.paper-table { width: 100%; margin: 0 !important; font-size: .82rem; font-variant-numeric: tabular-nums; background: transparent; }
-.paper-table th, .paper-table td { text-align: center !important; vertical-align: middle !important; white-space: nowrap; color: var(--text-primary); border-color: var(--border-color) !important; }
-.paper-table th { background: var(--background-accent); font-weight: 600; font-size: .78rem; }
-.paper-table th:first-child, .paper-table td:first-child { text-align: left !important; }
-.paper-table td.sub { padding-left: 1.6rem; color: var(--text-secondary); }
-.paper-table tr.group-row td { background: var(--background-secondary); font-style: italic; font-weight: 600; color: var(--text-secondary); font-size: .8rem; }
-.paper-table tr.block-start td { border-top: 2px solid var(--border-color) !important; }
-.paper-table tr.ours td { background: rgba(37, 99, 235, .06); }
-.paper-table .col-avg { background-color: rgba(251, 191, 36, .12); }
-.paper-table .col-ala { background-color: rgba(37, 99, 235, .08); }
-.paper-table th.col-avg { background: rgba(251, 191, 36, .25); }
-.paper-table th.col-ala { background: rgba(37, 99, 235, .14); }
-.paper-table tr.ours td.col-avg { background: rgba(251, 191, 36, .35); }
-.paper-table tr.ours td.col-ala { background: rgba(37, 99, 235, .2); }
-.paper-table tr.baseline-row td { color: var(--text-secondary); font-style: italic; }
-.paper-table strong { font-weight: 700; }
-.paper-table u { text-underline-offset: 3px; }
-.t2 .col-dev + .col-test, .t2 th.col-test:first-of-type { border-left: 2px solid var(--border-color) !important; }
-.t2 .model-cell { font-weight: 600; }
-.t2 .baseline-note { font-size: .74rem; font-weight: 400; font-style: italic; color: var(--text-secondary); }
-.t2 .selected { color: var(--primary-color); }
-.figure-caption { font-size: .85rem; color: var(--text-secondary); margin-top: .8rem; }
 
 /* Locus x granularity matrix */
 .matrix-lead { text-align: center; color: var(--text-secondary); margin-bottom: 1.25rem; }
@@ -63,21 +34,6 @@
 .analysis-sub { margin-top: 2.5rem !important; }
 .title.is-5 { color: var(--text-primary); }
 
-/* Qualitative examples */
-.qual-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem; }
-.qual-card { background: var(--background-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 1.1rem; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: .7rem; }
-.qual-attr { font-weight: 700; color: var(--text-primary); font-size: 1.05rem; }
-.qual-label { display: block; font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-light); margin-bottom: .2rem; }
-.qual-input { font-size: .9rem; color: var(--text-primary); font-style: italic; margin: 0; }
-.qual-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; }
-.qual-tags span { font-size: .75rem; font-weight: 600; border-radius: 999px; padding: .15rem .6rem; }
-.tag-truth { background: #dcfce7; color: #166534; }
-.tag-adv { background: #fee2e2; color: #991b1b; }
-.qual-out { border-radius: 8px; padding: .6rem .75rem; font-size: .85rem; line-height: 1.55; }
-.qual-out p { margin: 0; }
-.qual-out.bad { background: #fef2f2; color: #7f1d1d; }
-.qual-out.good { background: #f0fdf4; color: #14532d; }
-
 @media (max-width: 768px) {
   .paper-figure { padding: .4rem; }
   .equation { font-size: 1rem !important; }
@@ -88,12 +44,20 @@
   .lm-colhead, .lm-rowhead { font-size: .78rem; padding: .4rem; }
   .lm-colhead small, .lm-rowhead small, .lm-corner { display: none; }
 }
-.paper-table td.k-cell { text-align: center !important; color: var(--text-secondary); }
 .content h3.title.is-5 { margin-top: 1.5rem; margin-bottom: .5rem; }
 .content h3.title.is-5:first-child { margin-top: 0; }
-.teaser .paper-figure { max-width: 680px; margin: 0 auto; }
+
 .content p.lead-gap { margin-top: 3rem; }
 .content .equation { margin: 1rem auto; max-width: 560px; }
 .title-icon { height: 1.05em; width: auto; vertical-align: -0.17em; margin-right: .35em; border-radius: 22%; }
 .publication-authors:not(.publication-affiliations) .author-block { color: #db2777; font-weight: 600; }
 .publication-authors:not(.publication-affiliations) .author-block sup { color: var(--text-secondary); font-weight: 500; }
+
+/* Figures and table screenshots (caption below, as in the paper) */
+.paper-fig { margin: 1.5rem auto 2.5rem; text-align: center; }
+.paper-fig img { display: block; max-width: 100%; height: auto; margin: 0 auto; border: 1px solid var(--border-color); border-radius: 8px; background: #fff; }
+.paper-fig figcaption, .fig-caption { font-size: .92rem; color: var(--text-secondary); text-align: center; line-height: 1.55; margin: .8rem auto 0; max-width: 92%; }
+.fig-teaser { max-width: 680px; margin-top: 0; margin-bottom: 0; }
+.fig-teaser img { padding: .5rem; }
+.fig-teaser img { width: 100%; }
+.paper-fig figcaption { max-width: 760px; }
