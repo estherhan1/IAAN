@@ -117,8 +117,8 @@
   <section class="section">
     <div class="container is-max-desktop content">
       <h2 class="title is-3 has-text-centered">Related Work</h2>
-      <p><strong>LALMs and Audio Understanding Benchmarks.</strong> Large audio-language models pair a pretrained language-model backbone with an audio encoder, extending the language model to the auditory modality. They have been evaluated on instruction following, general audio comprehension, reasoning, fairness and robustness. Benchmarks that target fine-grained acoustic attributes beyond the spoken content show that current LALMs still struggle to capture and use such evidence. Among them, VoxParadox directly probes fine-grained acoustic ability across many attributes, and we adopt it as our testbed.</p>
-      <p><strong>Inference-Time Intervention.</strong> Inference-time intervention changes the behavior of a frozen model without retraining. In text LLMs it acts at several granularities: contrastive decoding at the output level, activation steering on hidden representations, and editing or controlling individual feed-forward neurons. Similar ideas appear in LALMs, through decoding that contrasts logits with and without audio, hidden-state steering with audio-derived or reasoning-oriented directions, and emotion neurons selected with labels in speech-generative models. These methods mostly act after the audio encoder. IAAN instead moves the intervention into the encoder, amplifying a sparse, input-specific set of neurons without any calibration set, attribute labels, fixed steering direction or extra decoding pass.</p>
+      <p><strong>LALMs and Audio Understanding Benchmarks.</strong> Large audio-language models (<a class="cite" href="#ref-1">Audio Flamingo</a>, <a class="cite" href="#ref-2">Audio Flamingo 2</a>, <a class="cite" href="#ref-3">Audio Flamingo 3</a>, <a class="cite" href="#ref-4">Qwen-Audio</a>, <a class="cite" href="#ref-5">Qwen2-Audio</a>, <a class="cite" href="#ref-6">Qwen2.5-Omni</a>, <a class="cite" href="#ref-7">DeSTA</a>, <a class="cite" href="#ref-8">instruction-following SLM</a>, <a class="cite" href="#ref-9">DeSTA2.5-Audio</a>, <a class="cite" href="#ref-10">SALMONN</a>, <a class="cite" href="#ref-11">GPT-4o voice mode</a>, <a class="cite" href="#ref-12">Taiwanese Mandarin SLM</a>, <a class="cite" href="#ref-13">Kimi-Audio</a>) pair a pretrained language-model backbone with an audio encoder, extending the language model to the auditory modality. They have been evaluated on instruction following (<a class="cite" href="#ref-41">Speech-IFEval</a>), general audio comprehension (<a class="cite" href="#ref-42">Dynamic-SUPERB</a>, <a class="cite" href="#ref-43">Dynamic-SUPERB Phase-2</a>, <a class="cite" href="#ref-44">AIR-Bench</a>), reasoning (<a class="cite" href="#ref-20">MMAU</a>, <a class="cite" href="#ref-25">SAKURA</a>, <a class="cite" href="#ref-45">MMAR</a>, <a class="cite" href="#ref-46">MUGEN</a>), fairness (<a class="cite" href="#ref-47">gender bias</a>) and robustness (<a class="cite" href="#ref-48">Emotional Damage</a>, <a class="cite" href="#ref-49">position bias</a>, <a class="cite" href="#ref-50">text bias</a>). Benchmarks that focus on fine-grained acoustic attributes beyond the spoken content (<a class="cite" href="#ref-21">VoxParadox</a>, <a class="cite" href="#ref-24">AudioBench</a>, <a class="cite" href="#ref-26">Vox-Profile</a>, <a class="cite" href="#ref-27">EchoMind</a>, <a class="cite" href="#ref-51">SD-Eval</a>, <a class="cite" href="#ref-52">in-the-wild paralinguistic reasoning</a>, <a class="cite" href="#ref-53">LISTEN</a>, <a class="cite" href="#ref-54">TAU</a>) show that current LALMs still struggle to capture and use such evidence. Among them, we adopt <a class="cite" href="#ref-21">VoxParadox</a> as our testbed, as it directly probes fine-grained acoustic ability across many attributes.</p>
+      <p><strong>Inference-Time Intervention.</strong> Inference-time intervention changes the behavior of a frozen model without retraining. In text LLMs it acts at several granularities: contrastive decoding at the output level (<a class="cite" href="#ref-55">Contrastive Decoding</a>, <a class="cite" href="#ref-56">DoLa</a>), activation steering on hidden states (<a class="cite" href="#ref-57">ActAdd</a>, <a class="cite" href="#ref-58">CAA</a>, <a class="cite" href="#ref-59">ITI</a>, <a class="cite" href="#ref-60">RepE</a>), and editing or controlling individual feed-forward neurons (<a class="cite" href="#ref-61">FFN key-value memories</a>, <a class="cite" href="#ref-62">Knowledge Neurons</a>, <a class="cite" href="#ref-63">ROME</a>). Similar ideas appear in LALMs. Decoding-side methods contrast logits with and without audio (<a class="cite" href="#ref-28">audio-aware decoding</a>, <a class="cite" href="#ref-29">contrastive decoding for LALMs</a>, <a class="cite" href="#ref-30">adaptive perturbation selection</a>, <a class="cite" href="#ref-64">AVCD</a>, <a class="cite" href="#ref-65">temporal contrastive decoding</a>), hidden-state steering uses audio-derived or reasoning-oriented directions (<a class="cite" href="#ref-31">adaptive vector steering</a>, <a class="cite" href="#ref-32">hidden-state nudging</a>, <a class="cite" href="#ref-66">accent steering</a>), and emotion neurons have been selected with labels in speech-generative LALMs (<a class="cite" href="#ref-34">neuron-level emotion control</a>). These methods mostly act after the audio encoder. IAAN instead moves the intervention into the encoder, amplifying a sparse, input-specific set of neurons without any calibration set, attribute labels, fixed steering direction or extra decoding pass.</p>
     </div>
   </section>
 
@@ -153,13 +153,23 @@
       <h2 class="title is-3 has-text-centered">Results</h2>
       <p><strong>Experimental Setup.</strong> IAAN is applied to Audio-Flamingo-3, Qwen2.5-Omni, Kimi-Audio and the acoustically fine-tuned AF3-PD. Evaluation uses <a href="https://huggingface.co/datasets/IHP-Lab/VoxParadox" target="_blank">VoxParadox</a>, where the voice carries one attribute and the spoken words imply another, the <em>adversarial label</em>. We report accuracy (Acc ↑) and adversarial-label agreement (ALA ↓). (K, g) is tuned on a held-out LISTEN development set by maximizing LA = Acc − ALA. Baselines intervene at other loci: audio-aware decoding (AAD), LLM-amplify and encoder hidden-state steering (HS-steer).</p>
 
-      <p><strong>Main Results.</strong> (1) IAAN consistently raises accuracy and lowers ALA on all three open-source LALMs, and the gains hold across most attributes rather than a few. (2) With IAAN, all three surpass the proprietary systems on both metrics. (3) IAAN still improves AF3-PD, a model already fine-tuned to rely on acoustic evidence, most clearly on intonation. This shows the encoder-side signal complements such training.</p>
+      <p class="lead"><strong>Main Results.</strong></p>
+      <ol class="findings">
+        <li>IAAN consistently raises accuracy and lowers ALA on all three open-source LALMs, and the gains hold across most attributes rather than a few.</li>
+        <li>With IAAN, all three surpass the proprietary systems on both metrics.</li>
+        <li>IAAN still improves AF3-PD, a model already fine-tuned to rely on acoustic evidence, most clearly on intonation. This shows the encoder-side signal complements such training.</li>
+      </ol>
       <figure class="paper-fig">
-        <img src="static/images/table1_main.png" width="970" height="821" alt="Table 1: accuracy and ALA on VoxParadox for all models and methods" loading="lazy">
+        <img src="static/images/table1_main.png" width="802" height="678" alt="Table 1: accuracy and ALA on VoxParadox for all models and methods" loading="lazy">
         <figcaption>Table 1: Main results on VoxParadox.</figcaption>
       </figure>
 
-      <p class="lead-gap"><strong>Locus and Granularity Comparison.</strong> (1) Acting after the encoder fails: contrasting logits (AAD) or amplifying language-model neurons (LLM-amplify) leaves accuracy near baseline. (2) Acting at the right locus is not enough: dense steering inside the encoder (HS-steer) gives only modest or mixed gains. (3) Only IAAN, which is inside the encoder and works on sparse neurons, consistently yields more acoustically grounded predictions.</p>
+      <p class="lead-gap"><strong>Locus and Granularity Comparison.</strong></p>
+      <ol class="findings">
+        <li>Acting after the encoder fails: contrasting logits (AAD) or amplifying language-model neurons (LLM-amplify) leaves accuracy near baseline.</li>
+        <li>Acting at the right locus is not enough: dense steering inside the encoder (HS-steer) gives only modest or mixed gains.</li>
+        <li>Only IAAN, which is inside the encoder and works on sparse neurons, consistently yields more acoustically grounded predictions.</li>
+      </ol>
         <div class="factor-table-wrap">
           <table class="factor-table">
             <thead>
@@ -176,13 +186,13 @@
 
       <p class="lead-gap"><strong>Hyperparameter Sensitivity.</strong> Sensitivity is model-dependent, but most (K, g) configurations beat the unamplified baseline. The choice affects how much IAAN helps rather than whether it helps, and configurations chosen on the development set transfer well to VoxParadox.</p>
       <figure class="paper-fig">
-        <img src="static/images/table2_hyperparam.png" width="531" height="309" alt="Table 2: hyperparameter sweep over K and g" loading="lazy">
+        <img src="static/images/table2_hyperparam.png" width="439" height="255" alt="Table 2: hyperparameter sweep over K and g" loading="lazy">
         <figcaption>Table 2: Hyperparameter sweep over K and g.</figcaption>
       </figure>
 
       <p class="lead-gap"><strong>Reference Ablation.</strong> Gaussian noise, silence and heavily noised audio work similarly, since none carries much of the source clip. As the reference retains more of the source, shared content cancels out of the contrast and performance drops on Audio-Flamingo-3 and Qwen2.5-Omni. A suboptimal reference reduces the gain but does not eliminate it.</p>
       <figure class="paper-fig">
-        <img src="static/images/table3_reference.png" width="524" height="291" alt="Table 3: reference ablation" loading="lazy">
+        <img src="static/images/table3_reference.png" width="433" height="240" alt="Table 3: reference ablation" loading="lazy">
         <figcaption>Table 3: Reference ablation.</figcaption>
       </figure>
 
@@ -203,15 +213,20 @@
       </div>
       <p class="fig-caption">Figure 2: Acoustic-score distribution and neuron localization.</p>
 
-      <p class="lead-gap"><strong>Selection of the Acoustic Neurons Drives the Gain.</strong> (1) Random neurons with the same budget barely help, so the gain comes from the acoustic score itself. (2) Amplifying the whole layer where IAAN's picks concentrate (Layer-amplify) stays at baseline. (3) Restricting selection to that layer recovers most or all of the gain on Audio-Flamingo-3 and Qwen2.5-Omni but not on Kimi-Audio, whose acoustic neurons are spread across layers. Searching the full encoder is therefore necessary.</p>
+      <p class="lead-gap"><strong>Selection of the Acoustic Neurons Drives the Gain.</strong></p>
+      <ol class="findings">
+        <li>Random neurons with the same budget barely help, so the gain comes from the acoustic score itself.</li>
+        <li>Amplifying the whole layer where IAAN's picks concentrate (Layer-amplify) stays at baseline.</li>
+        <li>Restricting selection to that layer recovers most or all of the gain on Audio-Flamingo-3 and Qwen2.5-Omni but not on Kimi-Audio, whose acoustic neurons are spread across layers. Searching the full encoder is therefore necessary.</li>
+      </ol>
       <figure class="paper-fig">
-        <img src="static/images/table4_selection.png" width="536" height="220" alt="Table 4: controls on neuron selection" loading="lazy">
+        <img src="static/images/table4_selection.png" width="443" height="182" alt="Table 4: controls on neuron selection" loading="lazy">
         <figcaption>Table 4: Controls on neuron selection.</figcaption>
       </figure>
 
       <p class="lead-gap"><strong>Qualitative Results.</strong> When asked to describe the voice freely, the baseline often follows the spoken words. With IAAN, Audio-Flamingo-3 reports the gender, emotion and speaker count actually present in the audio (Table 5).</p>
       <figure class="paper-fig">
-        <img src="static/images/table5_qualitative.png" width="1084" height="377" alt="Table 5: free-text acoustic descriptions from AF3 with and without IAAN" loading="lazy">
+        <img src="static/images/table5_qualitative.png" width="896" height="311" alt="Table 5: free-text acoustic descriptions from AF3 with and without IAAN" loading="lazy">
         <figcaption>Table 5: Qualitative examples on AF3.</figcaption>
       </figure>
     </div>
@@ -230,6 +245,67 @@ bash reproduce_main_table.sh --model af3,kimi --tasks pitch,speed --k 100 --gain
           <p class="figure-caption">Model weights and benchmark audio are downloaded separately; a GPU and model-specific dependencies are required. Published scores are reference values, not guaranteed rerun outputs.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- References -->
+  <section class="section" id="References">
+    <div class="container is-max-desktop content">
+      <h2 class="title is-3 has-text-centered">References</h2>
+      <p class="refs-note">Works cited in Related Work, numbered as in the paper.</p>
+      <ol class="ref-list">
+        <li id="ref-1" value="1">Z. Kong, A. Goel, R. Badlani, W. Ping, R. Valle, and B. Catanzaro, “Audio flamingo: A novel audio language model with few-shot learning and dialogue abilities,” in Proc. International Conference on Machine Learning (ICML), 2024, pp. 25 125–25 148.</li>
+        <li id="ref-2" value="2">S. Ghosh, Z. Kong, S. Kumar, S. Sakshi, J. Kim, W. Ping, R. Valle, D. Manocha, and B. Catanzaro, “Audio flamingo 2: An audio-language model with long-audio understanding and expert reasoning abilities,” in Proc. International Conference on Machine Learning (ICML), 2025, pp. 19 358–19 405.</li>
+        <li id="ref-3" value="3">S. Ghosh, A. Goel, J. Kim, S. Kumar, Z. Kong, S.-g. Lee, C.-H. H. Yang, R. Duraiswami, D. Manocha, R. Valle, and B. Catanzaro, “Audio flamingo 3: Advancing audio intelligence with fully open large audio language models,” in Advances in Neural Information Processing Systems (NeurIPS), 2025.</li>
+        <li id="ref-4" value="4">Y. Chu, J. Xu, X. Zhou, Q. Yang, S. Zhang, Z. Yan, C. Zhou, and J. Zhou, “Qwen-Audio: Advancing universal audio understanding via unified large-scale audio-language models,” arXiv preprint arXiv:2311.07919, 2023.</li>
+        <li id="ref-5" value="5">Y. Chu, J. Xu, Q. Yang, H. Wei, X. Wei, Z. Guo, Y. Leng, Y. Lv, J. He, J. Lin, C. Zhou, and J. Zhou, “Qwen2-audio technical report,” arXiv preprint arXiv:2407.10759, 2024.</li>
+        <li id="ref-6" value="6">J. Xu, Z. Guo, J. He, H. Hu, T. He, S. Bai, K. Chen, J. Wang, Y. Fan, K. Dang, B. Zhang, X. Wang, Y. Chu, and J. Lin, “Qwen2.5-Omni technical report,” arXiv preprint arXiv:2503.20215, 2025.</li>
+        <li id="ref-7" value="7">K.-H. Lu, Z. Chen, S.-W. Fu, H. Huang, B. Ginsburg, Y.-C. F. Wang, and H.-y. Lee, “DeSTA: Enhancing Speech Language Models through Descriptive Speech-Text Alignment,” in Interspeech 2024, 2024, pp. 4159–4163.</li>
+        <li id="ref-8" value="8">K.-H. Lu, Z. Chen, S.-W. Fu, C.-H. H. Yang, J. Balam, B. Ginsburg, Y.-C. F. Wang, and H.-Y. Lee, “Developing instruction-following speech language model without speech instruction-tuning data,” in ICASSP 2025 - 2025 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP), 2025, pp. 1–5.</li>
+        <li id="ref-9" value="9">K.-H. Lu, Z. Chen, S.-W. Fu, C.-H. H. Yang, S.-F. Huang, C.-K. Yang et al., “DeSTA2.5-Audio: Toward general-purpose large audio language model with self-generated cross-modal alignment,” IEEE Transactions on Audio, Speech and Language Processing, vol. 34, pp. 2062–2076, 2026.</li>
+        <li id="ref-10" value="10">C. Tang, W. Yu, G. Sun, X. Chen, T. Tan, W. Li, L. Lu, Z. Ma, and C. Zhang, “SALMONN: Towards generic hearing abilities for large language models,” in Proc. International Conference on Learning Representations (ICLR), 2024.</li>
+        <li id="ref-11" value="11">Y.-X. Lin, C.-K. Yang, W.-C. Chen, C.-A. Li, C.-y. Huang, X. Chen, and H.-y. Lee, “A preliminary exploration with GPT-4o voice mode,” arXiv preprint arXiv:2502.09940, 2025.</li>
+        <li id="ref-12" value="12">C.-K. Yang, Y.-K. Fu, C.-A. Li, Y.-C. Lin, Y.-X. Lin, W.-C. Chen, H. L. Chung, C.-Y. Kuan, W.-P. Huang, K.-H. Lu et al., “Building a Taiwanese Mandarin spoken language model: A first attempt,” arXiv preprint arXiv:2411.07111, 2024.</li>
+        <li id="ref-13" value="13">D. Ding, Z. Ju, Y. Leng, S. Liu, T. Liu, Z. Shang, K. Shen, W. Song, X. Tan, H. Tang et al., “Kimi-audio technical report,” arXiv preprint arXiv:2504.18425, 2025.</li>
+        <li id="ref-20" value="20">S. Sakshi, U. Tyagi, S. Kumar, A. Seth, R. Selvakumar, O. Nieto, R. Duraiswami, S. Ghosh, and D. Manocha, “MMAU: A massive multi-task audio understanding and reasoning benchmark,” in Proc. International Conference on Learning Representations (ICLR), 2025.</li>
+        <li id="ref-21" value="21">J. Pang, A. Chaubey, and M. Soleymani, “Do audio LLMs listen or read? analyzing and mitigating paralinguistic failures with VoxParadox,” in Proc. International Conference on Machine Learning (ICML), 2026.</li>
+        <li id="ref-24" value="24">B. Wang, X. Zou, G. Lin, S. Sun, Z. Liu, W. Zhang, Z. Liu, A. Aw, and N. F. Chen, “AudioBench: A universal benchmark for audio large language models,” in Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics (NAACL). Association for Computational Linguistics, 2025, pp. 4297–4316.</li>
+        <li id="ref-25" value="25">C.-K. Yang, N. Ho, Y.-T. Piao, and H.-y. Lee, “SAKURA: On the multihop reasoning of large audio-language models based on speech and audio information,” in Proc. Interspeech, 2025, pp. 1788–1792.</li>
+        <li id="ref-26" value="26">T. Feng, J. Lee, A. Xu, Y. Lee, T. Lertpetchpun, X. Shi, H. Wang, T. Thebaud, L. Moro-Velazquez, D. Byrd, N. Dehak, and S. Narayanan, “Vox-Profile: A speech foundation model benchmark for characterizing diverse speaker and speech traits,” arXiv preprint arXiv:2505.14648, 2025.</li>
+        <li id="ref-27" value="27">L. Zhou, L. Yu, Y. Lyu, Y. Lin, Z. Zhao, J. Ao, Y. Zhang, B. Wang, and H. Li, “EchoMind: An interrelated multi-level benchmark for evaluating empathetic speech language models,” arXiv preprint arXiv:2510.22758, 2025.</li>
+        <li id="ref-28" value="28">T.-w. Hsu, K.-H. Lu, C.-H. Chiang, and H.-y. Lee, “Reducing object hallucination in large audio-language models via audio-aware decoding,” in Proc. IEEE Automatic Speech Recognition and Understanding Workshop (ASRU), 2025, pp. 1–7.</li>
+        <li id="ref-29" value="29">T.-Q. Lin, W.-P. Huang, Y.-C. Lin, and H.-y. Lee, “How contrastive decoding enhances large audio language models?” arXiv preprint arXiv:2603.09232, 2026.</li>
+        <li id="ref-30" value="30">A. I. Grace, Z. Huo, and W. Wang, “Adaptive perturbation selection for contrastive audio decoding,” arXiv preprint arXiv:2607.00247, 2026.</li>
+        <li id="ref-31" value="31">T.-E. Lin, K.-Y. Lee, and H.-y. Lee, “Adaptive vector steering: A training-free, layer-wise intervention for hallucination mitigation in large audio and multimodal models,” arXiv preprint arXiv:2510.12851, 2025.</li>
+        <li id="ref-32" value="32">L.-L. Ieong, C.-C. Chen, C.-K. Yang, Y.-H. Huang, A.-Y. Cheng, and H.-y. Lee, “Nudging hidden states: Training-free model steering for chain-of-thought reasoning in large audio-language models,” arXiv preprint arXiv:2603.14636, 2026.</li>
+        <li id="ref-34" value="34">X. Zhao, I. R. Ulgen, P. Koehn, B. Schuller, and B. Sisman, “Neuron-level emotion control in speech-generative large audio-language models,” arXiv preprint arXiv:2603.17231, 2026.</li>
+        <li id="ref-41" value="41">K.-H. Lu, C.-Y. Kuan, and H.-y. Lee, “Speech-IFEval: Evaluating Instruction-Following and Quantifying Catastrophic Forgetting in Speech-Aware Language Models,” in Interspeech 2025, 2025, pp. 2078– 2082.</li>
+        <li id="ref-42" value="42">C.-Y. Huang, K.-H. Lu, S.-H. Wang, C.-Y. Hsiao, C.-Y. Kuan, H. Wu, S. Arora, K.-W. Chang, J. Shi, Y. Peng, R. Sharma, S. Watanabe, B. Ramakrishnan, S. Shehata, and H.-Y. Lee, “Dynamic-superb: Towards a dynamic, collaborative, and comprehensive instruction-tuning benchmark for speech,” in ICASSP 2024 - 2024 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP), 2024, pp. 12 136– 12 140.</li>
+        <li id="ref-43" value="43">C.-y. Huang, W.-C. Chen, S.-w. Yang, A. T. Liu, C.-A. Li, Y.-X. Lin, W.C. Tseng, A. Diwan, Y.-J. Shih, J. Shi et al., “Dynamic-SUPERB Phase2: A collaboratively expanding benchmark for measuring the capabilities of spoken language models with 180 tasks,” in Proc. International Conference on Learning Representations (ICLR), 2025.</li>
+        <li id="ref-44" value="44">Q. Yang, J. Xu, W. Liu, Y. Chu, Z. Jiang, X. Zhou, Y. Leng, Y. Lv, Z. Zhao, C. Zhou, and J. Zhou, “AIR-Bench: Benchmarking large audio-language models via generative comprehension,” in Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (ACL), 2024, pp. 1979–1998.</li>
+        <li id="ref-45" value="45">Z. Ma, Y. Ma, Y. Zhu, C. Yang, Y.-W. Chao, R. Xu, W. Chen, Y. Chen, Z. Chen, J. Cong, K. Li, K. Li, S. Li, X. Li, X. Li, Z. Lian, Y. Liang, M. Liu, Z. Niu, T. Wang, Y. Wang, Y. Wang, Y. Wu, G. Yang, J. Yu, R. Yuan, Z. Zheng, Z. Zhou, H. Zhu, W. Xue, E. Benetos, K. Yu, E.S. Chng, and X. Chen, “MMAR: A challenging benchmark for deep reasoning in speech, audio, music, and their mix,” in Advances in Neural Information Processing Systems, vol. 38. Curran Associates, Inc., 2025.</li>
+        <li id="ref-46" value="46">C.-K. Yang, Y.-S. Tsai, Y.-K. Guo, P.-L. Tsai, Y.-T. Piao, H.-W. Chen, T.L. Hsiao, Y.-M. Hsu, K.-H. Lu, and H.-y. Lee, “Mugen: Evaluating and improving multi-audio understanding of large audio-language models,” arXiv preprint arXiv:2603.09714, 2026.</li>
+        <li id="ref-47" value="47">Y.-C. Lin, T.-Q. Lin, C.-K. Yang, K.-H. Lu, W.-C. Chen, C.-Y. Kuan, and H.-Y. Lee, “Listen and speak fairly: a study on semantic gender bias in speech integrated large language models,” in 2024 IEEE Spoken Language Technology Workshop (SLT), 2024, pp. 439–446.</li>
+        <li id="ref-48" value="48">B.-H. Feng, C.-F. Liu, Y.-H. Li Liang, C.-K. Yang, S.-W. Fu, Z. Chen, K.-H. Lu, S.-F. Huang, C.-H. H. Yang, Y.-C. Frank Wang, Y.-N. Chen, and H.-Y. Lee, “Emotional damage: Investigating safety vulnerabilities of large audio-language models under speaker emotional variations,” in ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP), 2026, pp. 17 792–17 796.</li>
+        <li id="ref-49" value="49">Y.-X. Lin, C.-A. Li, S.-L. Wei, P.-C. Chen, H.-H. Chen, and H.-y. Lee, “Hearing the order: Investigating position bias in large audio-language models,” arXiv preprint arXiv:2510.00628, 2025.</li>
+        <li id="ref-50" value="50">C. Wang, G. Deng, X. Yang, H. Qiu, and T. Zhang, “When audio and text disagree: Benchmarking text bias in large audio-language models under cross-modal inconsistencies,” in Proc. Conference on Empirical Methods in Natural Language Processing (EMNLP), 2025.</li>
+        <li id="ref-51" value="51">J. Ao, Y. Wang, X. Tian, D. Chen, J. Zhang, L. Lu, Y. Wang, H. Li, and Z. Wu, “SD-Eval: A benchmark dataset for spoken dialogue understanding beyond words,” in Advances in Neural Information Processing Systems (NeurIPS), vol. 37, 2024, pp. 56 898–56 918.</li>
+        <li id="ref-52" value="52">Q. Wang, H. B. Sailor, T. Liu, W. Zhang, M. Huzaifah, N. Lertcheva, S. Sun, N. F. Chen, J. Wu, and A. Aw, “Benchmarking contextual and paralinguistic reasoning in speech-LLMs: A case study with in-the-wild data,” in Findings of the Association for Computational Linguistics: EMNLP 2025. Association for Computational Linguistics, 2025, pp. 14 133–14 148.</li>
+        <li id="ref-53" value="53">J. Chen, Z. Guo, J. Chun, P. Wang, A. Perrault, and M. Elsner, “Do audio LLMs really LISTEN, or just transcribe? measuring lexical vs. acoustic emotion cues reliance,” in Proceedings of the 19th Conference of the European Chapter of the Association for Computational Linguistics (Volume 1: Long Papers). Association for Computational Linguistics, 2026, pp. 5848–5877.</li>
+        <li id="ref-54" value="54">Y.-C. Lin, Y.-H. Chen, J.-K. Dong, Y.-H. Huang, S.-C. Chen et al., “TAU: A benchmark for cultural sound understanding beyond semantics,” in ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP), 2026, pp. 15 542– 15 546.</li>
+        <li id="ref-55" value="55">X. L. Li, A. Holtzman, D. Fried, P. Liang, J. Eisner, T. Hashimoto, L. Zettlemoyer, and M. Lewis, “Contrastive decoding: Open-ended text generation as optimization,” in Proc. Annual Meeting of the Association for Computational Linguistics (ACL), 2023, pp. 12 286–12 312.</li>
+        <li id="ref-56" value="56">Y.-S. Chuang, Y. Xie, H. Luo, Y. Kim, J. Glass, and P. He, “DoLa: Decoding by contrasting layers improves factuality in large language models,” in Proc. International Conference on Learning Representations (ICLR), 2024.</li>
+        <li id="ref-57" value="57">A. M. Turner, L. Thiergart, G. Leech, D. Udell, J. J. Vazquez, U. Mini, and M. MacDiarmid, “Steering language models with activation engineering,” arXiv preprint arXiv:2308.10248, 2023.</li>
+        <li id="ref-58" value="58">N. Rimsky, N. Gabrieli, J. Schulz, M. Tong, E. Hubinger, and A. Turner, “Steering llama 2 via contrastive activation addition,” in Proc. Annual Meeting of the Association for Computational Linguistics (ACL), 2024, pp. 15 504–15 522.</li>
+        <li id="ref-59" value="59">K. Li, O. Patel, F. Viégas, H. Pfister, and M. Wattenberg, “Inference-time intervention: Eliciting truthful answers from a language model,” in Advances in Neural Information Processing Systems (NeurIPS), 2023.</li>
+        <li id="ref-60" value="60">A. Zou, L. Phan, S. Chen, J. Campbell, P. Guo, R. Ren, A. Pan, X. Yin, M. Mazeika, A.-K. Dombrowski, S. Goel, N. Li, M. J. Byun, Z. Wang, A. Mallen, S. Basart, S. Koyejo, D. Song, M. Fredrikson, J. Z. Kolter, and D. Hendrycks, “Representation engineering: A top-down approach to ai transparency,” arXiv preprint arXiv:2310.01405, 2023.</li>
+        <li id="ref-61" value="61">M. Geva, R. Schuster, J. Berant, and O. Levy, “Transformer feed-forward layers are key-value memories,” in Proc. Conference on Empirical Methods in Natural Language Processing (EMNLP), 2021, pp. 5484– 5495.</li>
+        <li id="ref-62" value="62">D. Dai, L. Dong, Y. Hao, Z. Sui, B. Chang, and F. Wei, “Knowledge neurons in pretrained transformers,” in Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers). Association for Computational Linguistics, 2022, pp. 8493–8502.</li>
+        <li id="ref-63" value="63">K. Meng, D. Bau, A. Andonian, and Y. Belinkov, “Locating and editing factual associations in GPT,” in Advances in Neural Information Processing Systems (NeurIPS), vol. 35, 2022, pp. 17 359–17 372.</li>
+        <li id="ref-64" value="64">C. Jung, Y. Jang, and J. S. Chung, “AVCD: Mitigating hallucinations in audio-visual large language models through contrastive decoding,” in Advances in Neural Information Processing Systems (NeurIPS), 2025.</li>
+        <li id="ref-65" value="65">Y. Li, Y. Liu, Z. Song, Y. Wei, M. Takáč, and S. Lahlou, “Temporal contrastive decoding: A training-free method for large audio-language models,” arXiv preprint arXiv:2604.15383, 2026, accepted to Findings of ACL 2026.</li>
+        <li id="ref-66" value="66">J. Sun, Y. Xiao, S. K. Chung, Q. Hu, G. Huang, E.-J. Holden, and T. Dang, “Activation steering for accent adaptation in large audio language models,” arXiv preprint arXiv:2603.05813, 2026.</li>
+      </ol>
     </div>
   </section>
 

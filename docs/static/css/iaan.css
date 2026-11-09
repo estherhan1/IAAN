@@ -55,3 +55,20 @@
 .publication-affiliations .venue a { color: inherit; border-bottom: 1px dashed currentColor; }
 .publication-affiliations .venue a:hover { color: #db2777; }
 .content .equation { background: #fff; border: 1px solid var(--border-color); }
+
+/* Numbered findings: (1), (2), (3) on separate lines */
+.content p.lead { margin-bottom: .4rem; }
+.content p.lead-gap { margin-bottom: .4rem; }
+.content ol.findings { list-style: none; counter-reset: finding; margin: 0 0 1rem 0; padding: 0; }
+.content ol.findings li { counter-increment: finding; position: relative; padding-left: 2.1rem; margin-bottom: .35rem; }
+.content ol.findings li::before { content: "(" counter(finding) ")"; position: absolute; left: 0; color: #db2777; font-weight: 600; }
+
+/* Citations and references */
+.content a.cite { color: var(--primary-color); text-decoration: none; border-bottom: 1px dotted currentColor; }
+.content a.cite:hover { color: #db2777; }
+.refs-note { text-align: center; color: var(--text-secondary); font-size: .9rem; }
+.content ol.ref-list { font-size: .82rem; color: var(--text-secondary); line-height: 1.5; margin-left: 2.2rem; }
+.content ol.ref-list li { margin-bottom: .35rem; padding-left: .2rem; }
+.content ol.ref-list li::marker { content: "[" counter(list-item) "] "; color: var(--text-primary); }
+.content ol.ref-list li:target { background: #fdf2f8; border-radius: 4px; }
+html { scroll-padding-top: 1.5rem; }
