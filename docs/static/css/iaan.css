@@ -95,3 +95,4 @@
 .paper-table td.k-cell { text-align: center !important; color: var(--text-secondary); }
 .content h3.title.is-5 { margin-top: 1.5rem; margin-bottom: .5rem; }
 .content h3.title.is-5:first-child { margin-top: 0; }
+.teaser .paper-figure { max-width: 680px; margin: 0 auto; }
