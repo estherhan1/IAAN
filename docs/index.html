@@ -115,17 +115,16 @@
     </div>
   </section>
 
-  <!-- Overview -->
+  <!-- Method -->
   <section class="section">
     <div class="container is-max-desktop content">
-      <h2 class="title is-3 has-text-centered">Overview</h2>
+      <h2 class="title is-3 has-text-centered">Method</h2>
       <p><strong>Motivation.</strong> LALMs handle what is said far better than how it is said. Most inference-time fixes act after the audio encoder, at the decoding side or inside the language model, and at a coarse granularity. Yet the encoder is where acoustic information is first extracted from the waveform. IAAN therefore intervenes inside the encoder, at the level of individual feed-forward neurons.</p>
       <p><strong>Acoustic Score.</strong> A neuron that encodes a genuine acoustic attribute should respond more strongly to real audio than to unstructured noise. IAAN runs the encoder on the real clip <i>x</i> and on a Gaussian-noise reference <i>r</i> with matching length, mean and variance. It then scores each neuron by the difference in its mean activation:</p>
       <p class="equation"><i>s<sub>i</sub></i> = mean<sub><i>t</i></sub> <i>a<sub>i</sub></i><sup>real</sup>(<i>t</i>) − mean<sub><i>t</i></sub> <i>a<sub>i</sub></i><sup>ref</sup>(<i>t</i>)</p>
       <p><strong>Selection and Amplification.</strong> The top-K neurons by score form the amplification set S. During the encoder pass on the real audio, a forward hook scales them by a gain <i>g</i> &gt; 1, and the encoder output then goes to the language model as usual:</p>
       <p class="equation"><i>a<sub>i</sub></i> ← <i>g</i> · <i>a<sub>i</sub></i>, &nbsp; <i>i</i> ∈ S</p>
       <p>The score is computed per clip, so IAAN needs no training, attribute labels or calibration set. It only adds encoder passes, which are cheap next to the language model.</p>
-      <p><strong>Experimental Setup.</strong> IAAN is applied to Audio-Flamingo-3, Qwen2.5-Omni, Kimi-Audio and the acoustically fine-tuned AF3-PD. Evaluation uses <a href="https://huggingface.co/datasets/IHP-Lab/VoxParadox" target="_blank">VoxParadox</a>, where the voice carries one attribute and the spoken words imply another, the <em>adversarial label</em>. We report accuracy (Acc ↑) and adversarial-label agreement (ALA ↓). (K, g) is tuned on a held-out LISTEN development set by maximizing LA = Acc − ALA. Baselines intervene at other loci: audio-aware decoding (AAD), LLM-amplify and encoder hidden-state steering (HS-steer).</p>
     </div>
   </section>
 
@@ -133,6 +132,7 @@
   <section class="section hero is-light">
     <div class="container is-max-desktop content">
       <h2 class="title is-3 has-text-centered">Results</h2>
+      <p><strong>Experimental Setup.</strong> IAAN is applied to Audio-Flamingo-3, Qwen2.5-Omni, Kimi-Audio and the acoustically fine-tuned AF3-PD. Evaluation uses <a href="https://huggingface.co/datasets/IHP-Lab/VoxParadox" target="_blank">VoxParadox</a>, where the voice carries one attribute and the spoken words imply another, the <em>adversarial label</em>. We report accuracy (Acc ↑) and adversarial-label agreement (ALA ↓). (K, g) is tuned on a held-out LISTEN development set by maximizing LA = Acc − ALA. Baselines intervene at other loci: audio-aware decoding (AAD), LLM-amplify and encoder hidden-state steering (HS-steer).</p>
 
       <p><strong>Main Results.</strong> (1) IAAN consistently raises accuracy and lowers ALA on all three open-source LALMs, and the gains hold across most attributes rather than a few. (2) With IAAN, all three surpass the proprietary systems on both metrics. (3) IAAN still improves AF3-PD, a model already fine-tuned to rely on acoustic evidence, most clearly on intonation. This shows the encoder-side signal complements such training.</p>
       <p class="table-title"><strong>Table I.</strong> Accuracy (%) and adversarial-label agreement (ALA, %) on VoxParadox. †: baseline reported by VoxParadox; <em>reproduced</em>: our unamplified baseline under the official protocol. <strong>Bold</strong>: best per column within each model's block. Spk ID = speaker identity, Spk Cnt = speaker counting, Range = vocal range.</p>
