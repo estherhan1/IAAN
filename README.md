@@ -66,7 +66,7 @@ docs/
   static/css/                     # Academic Project Page Template + IAAN styling
 ```
 
-The other existing folders (`0_shared/`, `1_iaan_baselines/`, `2_steer_cd/`, `3_mmau_control/`, `run_chains/`) are historical experiment archives and **are not called by the Main Table runner**. See [older experimental notes](STEER_CD_REPORT.md) if needed.
+This release retains only the IAAN Main Table reproduction code and the project website. Previous Steer-CD and ablation experiment archives have been removed from the current branch; their history remains accessible through earlier Git commits.
 
 ## Installation, data and outputs
 
