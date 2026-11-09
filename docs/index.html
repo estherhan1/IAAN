@@ -72,12 +72,6 @@
                   </a>
                 </span>
                 <span class="link-block">
-                  <a href="https://huggingface.co/datasets/IHP-Lab/VoxParadox" target="_blank" class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon"><i class="fas fa-database"></i></span>
-                    <span>Benchmark</span>
-                  </a>
-                </span>
-                <span class="link-block">
                   <a href="https://arxiv.org/abs/2607.11801" target="_blank" class="external-link button is-normal is-rounded is-dark">
                     <span class="icon"><i class="ai ai-arxiv"></i></span>
                     <span>arXiv</span>
@@ -231,23 +225,37 @@
         </div>
 
         <h3 class="title is-5 analysis-sub">Locus and Granularity Comparison</h3>
-        <div class="comparison-grid">
-          <div class="comparison-card">
-            <span class="comparison-tag after">After the encoder</span>
-            <h3>AAD &amp; LLM-amplify</h3>
-            <p>Contrasting logits barely changes accuracy. Amplifying language-model neurons leaves the open-source models near baseline and sharply lowers AF3-PD's accuracy.</p>
+        <p class="matrix-lead">Each compared method changes one factor relative to IAAN: <strong>where</strong> it intervenes (locus) or <strong>how finely</strong> it acts (granularity).</p>
+        <div class="locus-matrix" role="table" aria-label="Methods by intervention locus and granularity">
+          <div class="lm-corner" role="columnheader"><span>Locus ↓</span><span>Granularity →</span></div>
+          <div class="lm-colhead" role="columnheader">Coarse / dense<small>logits or a whole-layer direction</small></div>
+          <div class="lm-colhead" role="columnheader">Individual neurons<small>sparse, selected per clip</small></div>
+
+          <div class="lm-rowhead" role="rowheader">After the encoder<small>decoding side or inside the LLM</small></div>
+          <div class="lm-cell is-bad" role="cell">
+            <span class="lm-verdict"><i class="fas fa-times-circle"></i> No gain</span>
+            <h4>AAD</h4>
+            <p>Contrasts output logits with and without audio; accuracy barely moves.</p>
           </div>
-          <div class="comparison-card">
-            <span class="comparison-tag dense">Encoder, dense</span>
-            <h3>HS-steer</h3>
-            <p>Gives only modest gains, or losses, at the same locus. A dense direction mixes the few neurons carrying acoustic evidence with many irrelevant dimensions.</p>
+          <div class="lm-cell is-bad" role="cell">
+            <span class="lm-verdict"><i class="fas fa-times-circle"></i> No gain</span>
+            <h4>LLM-amplify</h4>
+            <p>Same acoustic criterion, but on LLM neurons; stays near baseline and hurts AF3-PD.</p>
           </div>
-          <div class="comparison-card is-ours">
-            <span class="comparison-tag ours">Encoder, sparse neurons</span>
-            <h3>IAAN</h3>
-            <p>Highest accuracy on every model while also lowering ALA. It is the only method that consistently produces more acoustically grounded predictions.</p>
+
+          <div class="lm-rowhead" role="rowheader">Inside the encoder<small>where acoustic information is first extracted</small></div>
+          <div class="lm-cell is-mid" role="cell">
+            <span class="lm-verdict"><i class="fas fa-minus-circle"></i> Modest / mixed</span>
+            <h4>HS-steer</h4>
+            <p>Dense steering vector at the same layer; dilutes the few acoustic neurons among many irrelevant dimensions.</p>
+          </div>
+          <div class="lm-cell is-good" role="cell">
+            <span class="lm-verdict"><i class="fas fa-check-circle"></i> Best on every model</span>
+            <h4>IAAN</h4>
+            <p>Highest accuracy while also lowering ALA; the only consistently more acoustically grounded method.</p>
           </div>
         </div>
+        <p class="figure-caption has-text-centered">Right locus <em>and</em> right granularity are both needed; numbers are in Table I.</p>
 
         <h3 class="title is-5 analysis-sub">Hyperparameter Sensitivity</h3>
         <div class="content">
