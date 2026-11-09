@@ -128,4 +128,4 @@ CPU unit tests cover signed selection, hook restoration, task filtering and repo
 
 ## Reference
 
-[IAAN paper](https://arxiv.org/abs/2607.11801) · [OpenReview](https://openreview.net/forum?id=aZaFtJs6dr) · [VoxParadox dataset and official evaluator](https://huggingface.co/datasets/IHP-Lab/VoxParadox) · [Kimi-Audio](https://github.com/MoonshotAI/Kimi-Audio)
+[IAAN paper](https://arxiv.org/abs/2607.11801) · [VoxParadox dataset and official evaluator](https://huggingface.co/datasets/IHP-Lab/VoxParadox) · [Kimi-Audio](https://github.com/MoonshotAI/Kimi-Audio)
