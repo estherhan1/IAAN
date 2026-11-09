@@ -63,3 +63,5 @@
 .paper-fig figcaption { max-width: 760px; }
 #BibTeX { background: var(--background-secondary); border-top: 1px solid var(--border-color); }
 #BibTeX .container { min-width: 0; }
+.publication-affiliations .venue a { color: inherit; border-bottom: 1px dashed currentColor; }
+.publication-affiliations .venue a:hover { color: #db2777; }
