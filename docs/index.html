@@ -113,21 +113,42 @@
     </div>
   </section>
 
-  <!-- Method -->
+  <!-- Related Work -->
   <section class="section">
     <div class="container is-max-desktop content">
-      <h2 class="title is-3 has-text-centered">Method</h2>
-      <p><strong>Motivation.</strong> LALMs handle what is said far better than how it is said. Most inference-time fixes act after the audio encoder, at the decoding side or inside the language model, and at a coarse granularity. Yet the encoder is where acoustic information is first extracted from the waveform. IAAN therefore intervenes inside the encoder, at the level of individual feed-forward neurons.</p>
-      <p><strong>Acoustic Score.</strong> A neuron that encodes a genuine acoustic attribute should respond more strongly to real audio than to unstructured noise. IAAN runs the encoder on the real clip <i>x</i> and on a Gaussian-noise reference <i>r</i> with matching length, mean and variance. It then scores each neuron by the difference in its mean activation:</p>
-      <p class="equation"><i>s<sub>i</sub></i> = mean<sub><i>t</i></sub> <i>a<sub>i</sub></i><sup>real</sup>(<i>t</i>) − mean<sub><i>t</i></sub> <i>a<sub>i</sub></i><sup>ref</sup>(<i>t</i>)</p>
-      <p><strong>Selection and Amplification.</strong> The top-K neurons by score form the amplification set S. During the encoder pass on the real audio, a forward hook scales them by a gain <i>g</i> &gt; 1, and the encoder output then goes to the language model as usual:</p>
-      <p class="equation"><i>a<sub>i</sub></i> ← <i>g</i> · <i>a<sub>i</sub></i>, &nbsp; <i>i</i> ∈ S</p>
-      <p>The score is computed per clip, so IAAN needs no training, attribute labels or calibration set. It only adds encoder passes, which are cheap next to the language model.</p>
+      <h2 class="title is-3 has-text-centered">Related Work</h2>
+      <p><strong>LALMs and Audio Understanding Benchmarks.</strong> Large audio-language models pair a pretrained language-model backbone with an audio encoder, extending the language model to the auditory modality. They have been evaluated on instruction following, general audio comprehension, reasoning, fairness and robustness. Benchmarks that target fine-grained acoustic attributes beyond the spoken content show that current LALMs still struggle to capture and use such evidence. Among them, VoxParadox directly probes fine-grained acoustic ability across many attributes, and we adopt it as our testbed.</p>
+      <p><strong>Inference-Time Intervention.</strong> Inference-time intervention changes the behavior of a frozen model without retraining. In text LLMs it acts at several granularities: contrastive decoding at the output level, activation steering on hidden representations, and editing or controlling individual feed-forward neurons. Similar ideas appear in LALMs, through decoding that contrasts logits with and without audio, hidden-state steering with audio-derived or reasoning-oriented directions, and emotion neurons selected with labels in speech-generative models. These methods mostly act after the audio encoder. IAAN instead moves the intervention into the encoder, amplifying a sparse, input-specific set of neurons without any calibration set, attribute labels, fixed steering direction or extra decoding pass.</p>
     </div>
   </section>
 
-  <!-- Results -->
+  <!-- Method -->
+
   <section class="section hero is-light">
+    <div class="container is-max-desktop content">
+      <h2 class="title is-3 has-text-centered">Method</h2>
+      <p><strong>Motivation.</strong> LALMs pair a pretrained language-model backbone with an audio encoder. They handle <em>what</em> is said far better than <em>how</em> it is said, such as a speaker's emotion, age or pitch. Most inference-time fixes intervene after the audio encoder, by contrasting output logits or steering the backbone's hidden states, attention or neurons. Their effect is bounded by how much acoustic evidence survives into the backbone. The audio encoder is where that evidence is first extracted from the waveform, yet it has received little attention as a site of intervention, especially at the level of individual neurons. IAAN (<strong>I</strong>dentifying and <strong>A</strong>mplifying <strong>A</strong>coustic <strong>N</strong>eurons) intervenes there.</p>
+
+      <p><strong>Preliminary: Feed-Forward Neurons.</strong> Each transformer block applies multi-head attention followed by a two-layer feed-forward network, FFN(<i>h</i>) = W<sub>2</sub> ϕ(W<sub>1</sub><i>h</i>). Following prior neuron-level work, each coordinate of the hidden activation, <i>a<sub>i</sub></i> = ϕ(W<sub>1</sub><i>h</i>)<sub><i>i</i></sub>, is treated as one neuron. Applied to every layer of the audio encoder, this gives the full set of candidate neurons; <i>a<sub>i</sub></i>(<i>t</i>) denotes neuron <i>i</i>'s activation at frame <i>t</i>.</p>
+
+      <p><strong>Acoustic Score.</strong> A neuron that encodes a genuine acoustic attribute should respond more strongly to real audio than to a signal that carries no such attribute. IAAN builds a reference <i>r</i> by replacing the audio with Gaussian noise of the same length and approximately the same mean and variance as the real clip <i>x</i>, drawn with a fixed per-clip seed. The encoder runs on both inputs, and each neuron is scored by how much more it responds to the real audio:</p>
+      <p class="equation"><i>s<sub>i</sub></i> = mean<sub><i>t</i></sub> <i>a<sub>i</sub></i><sup>real</sup>(<i>t</i>) − mean<sub><i>t</i></sub> <i>a<sub>i</sub></i><sup>ref</sup>(<i>t</i>)</p>
+      <p>A large positive score marks a neuron that is more active on real audio than on its noise reference; a large negative score marks one that is less active. The score is computed independently for each clip from its own two passes, so no external audio dataset is needed.</p>
+
+      <p><strong>Selection and Amplification.</strong> Neurons are ranked by acoustic score, and the top-K (the <em>neuron budget</em>) form the amplification set S. During the encoder pass on the real audio, a forward hook scales their activations by a gain <i>g</i> &gt; 1. The amplified encoder output then goes to the language model together with the question to produce the answer:</p>
+      <p class="equation"><i>a<sub>i</sub></i> ← <i>g</i> · <i>a<sub>i</sub></i>, &nbsp; <i>i</i> ∈ S</p>
+
+      <p><strong>Why it is practical.</strong></p>
+      <ul>
+        <li><strong>Training-free and label-free.</strong> No fine-tuning, attribute labels, calibration set or fixed steering direction is required; the neuron set is chosen on the fly for each clip.</li>
+        <li><strong>Lightweight.</strong> IAAN only adds encoder forward passes, on an encoder an order of magnitude smaller than the language model, and needs no extra language-model decoding pass.</li>
+        <li><strong>Two hyperparameters.</strong> The neuron budget K and gain g are tuned once per model on a held-out development set, never on the test benchmark.</li>
+      </ul>
+    </div>
+  </section>
+
+<!-- Results -->
+  <section class="section">
     <div class="container is-max-desktop content">
       <h2 class="title is-3 has-text-centered">Results</h2>
       <p><strong>Experimental Setup.</strong> IAAN is applied to Audio-Flamingo-3, Qwen2.5-Omni, Kimi-Audio and the acoustically fine-tuned AF3-PD. Evaluation uses <a href="https://huggingface.co/datasets/IHP-Lab/VoxParadox" target="_blank">VoxParadox</a>, where the voice carries one attribute and the spoken words imply another, the <em>adversarial label</em>. We report accuracy (Acc ↑) and adversarial-label agreement (ALA ↓). (K, g) is tuned on a held-out LISTEN development set by maximizing LA = Acc − ALA. Baselines intervene at other loci: audio-aware decoding (AAD), LLM-amplify and encoder hidden-state steering (HS-steer).</p>
@@ -139,34 +160,18 @@
       </figure>
 
       <p class="lead-gap"><strong>Locus and Granularity Comparison.</strong> (1) Acting after the encoder fails: contrasting logits (AAD) or amplifying language-model neurons (LLM-amplify) leaves accuracy near baseline. (2) Acting at the right locus is not enough: dense steering inside the encoder (HS-steer) gives only modest or mixed gains. (3) Only IAAN, which is inside the encoder and works on sparse neurons, consistently yields more acoustically grounded predictions.</p>
-        <div class="locus-matrix" role="table" aria-label="Methods by intervention locus and granularity">
-          <div class="lm-corner" role="columnheader"><span>Locus ↓</span><span>Granularity →</span></div>
-          <div class="lm-colhead" role="columnheader">Coarse / dense<small>logits or a whole-layer direction</small></div>
-          <div class="lm-colhead" role="columnheader">Individual neurons<small>sparse, selected per clip</small></div>
-
-          <div class="lm-rowhead" role="rowheader">After the encoder<small>decoding side or inside the LLM</small></div>
-          <div class="lm-cell is-bad" role="cell">
-            <span class="lm-verdict"><i class="fas fa-times-circle"></i> No gain</span>
-            <h4>AAD</h4>
-            <p>Contrasts output logits with and without audio; accuracy barely moves.</p>
-          </div>
-          <div class="lm-cell is-bad" role="cell">
-            <span class="lm-verdict"><i class="fas fa-times-circle"></i> No gain</span>
-            <h4>LLM-amplify</h4>
-            <p>Same acoustic criterion, but on LLM neurons; stays near baseline and hurts AF3-PD.</p>
-          </div>
-
-          <div class="lm-rowhead" role="rowheader">Inside the encoder<small>where acoustic information is first extracted</small></div>
-          <div class="lm-cell is-mid" role="cell">
-            <span class="lm-verdict"><i class="fas fa-minus-circle"></i> Modest / mixed</span>
-            <h4>HS-steer</h4>
-            <p>Dense steering vector at the same layer; dilutes the few acoustic neurons among many irrelevant dimensions.</p>
-          </div>
-          <div class="lm-cell is-good" role="cell">
-            <span class="lm-verdict"><i class="fas fa-check-circle"></i> Best on every model</span>
-            <h4>IAAN</h4>
-            <p>Highest accuracy while also lowering ALA; the only consistently more acoustically grounded method.</p>
-          </div>
+        <div class="factor-table-wrap">
+          <table class="factor-table">
+            <thead>
+              <tr><th>Method</th><th>Inside the encoder?</th><th>Neuron-level?</th><th>Outcome</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>AAD</strong><span>contrasts output logits</span></td><td class="no"><i class="fas fa-times"></i></td><td class="no"><i class="fas fa-times"></i></td><td>Near baseline</td></tr>
+              <tr><td><strong>LLM-amplify</strong><span>amplifies LLM neurons</span></td><td class="no"><i class="fas fa-times"></i></td><td class="yes"><i class="fas fa-check"></i></td><td>Near baseline</td></tr>
+              <tr><td><strong>HS-steer</strong><span>dense encoder steering</span></td><td class="yes"><i class="fas fa-check"></i></td><td class="no"><i class="fas fa-times"></i></td><td>Modest or mixed</td></tr>
+              <tr class="is-ours"><td><strong>IAAN</strong><span>sparse encoder neurons</span></td><td class="yes"><i class="fas fa-check"></i></td><td class="yes"><i class="fas fa-check"></i></td><td><strong>Best on every model</strong></td></tr>
+            </tbody>
+          </table>
         </div>
 
       <p class="lead-gap"><strong>Hyperparameter Sensitivity.</strong> Sensitivity is model-dependent, but most (K, g) configurations beat the unamplified baseline. The choice affects how much IAAN helps rather than whether it helps, and configurations chosen on the development set transfer well to VoxParadox.</p>
@@ -213,7 +218,7 @@
   </section>
 
   <!-- Reproduce -->
-  <section class="hero is-small">
+  <section class="hero is-small is-light">
     <div class="hero-body">
       <div class="container is-max-desktop">
         <h2 class="title is-3 has-text-centered">Reproduce the Main Table</h2>
