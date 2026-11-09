@@ -95,3 +95,5 @@
 .content p.lead-gap { margin-top: 3rem; }
 .content .equation { margin: 1rem auto; max-width: 560px; }
 .title-icon { height: 1.05em; width: auto; vertical-align: -0.17em; margin-right: .35em; border-radius: 22%; }
+.publication-authors:not(.publication-affiliations) .author-block { color: #db2777; font-weight: 600; }
+.publication-authors:not(.publication-affiliations) .author-block sup { color: var(--text-secondary); font-weight: 500; }
