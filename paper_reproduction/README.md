@@ -1,4 +1,11 @@
-# IAAN SLT 2026 reproduction interface
+# IAAN: Identifying and Amplifying Acoustic Neurons
+
+**Enhancing How Large Audio-Language Models Hear: Identifying and Amplifying Acoustic Neurons in the Audio Encoder**  
+Yu-Han Huang, Chih-Kai Yang, Ke-Han Lu, An-Yu Cheng, Hung-yi Lee · IEEE SLT 2026
+
+[Paper (OpenReview)](https://openreview.net/forum?id=aZaFtJs6dr) · [arXiv](https://arxiv.org/abs/2607.11801) · [PDF](https://arxiv.org/pdf/2607.11801)
+
+[Benchmark (VoxParadox)](https://voxparadox.github.io/) · [Benchmark code](https://github.com/ihp-lab/VoxParadox) · [Dataset](https://huggingface.co/datasets/IHP-Lab/VoxParadox)
 
 **Status: command-line interface implemented, complete paper reproduction not yet runnable** without the original model-specific official greedy-generation runners and VoxParadox dataset. All changes are in this draft branch; Steer-CD originals remain untouched.
 
@@ -73,9 +80,27 @@ cd paper_reproduction
 python -m unittest discover -s tests -v
 ```
 
-## Paper reference
+## Main results from the paper (not re-run here)
 
-*Enhancing How Large Audio-Language Models Hear: Identifying and Amplifying
-Acoustic Neurons in the Audio Encoder*, IEEE SLT 2026.
-Full-test published baseline → IAAN: AF3 13.1 → 38.8; Qwen 7.6 → 29.0;
-Kimi 21.2 → 30.9. This launcher never copies those values into reports.
+| Model | Baseline Acc | IAAN Acc | Gain |
+|---|---:|---:|---:|
+| Audio-Flamingo-3 | 13.1 | 38.8 | +25.7 |
+| Qwen2.5-Omni | 7.6 | 29.0 | +21.4 |
+| Kimi-Audio | 21.2 | 30.9 | +9.7 |
+
+These are **published reference figures**, not outputs of this repository.
+The runner does not populate missing predictions with these values.
+
+## Citation
+
+```bibtex
+@misc{huang2026iaan,
+  title={Encoder-Side Neuron Identification and Amplification for Acoustic Perception in Large Audio-Language Models},
+  author={Huang, Yu-Han and Yang, Chih-Kai and Lu, Ke-Han and Cheng, An-Yu and Lee, Hung-yi},
+  year={2026},
+  eprint={2607.11801},
+  archivePrefix={arXiv}
+}
+```
+
+The arXiv version currently uses a different title from the IEEE SLT manuscript; the links above point to the same IAAN work. Check the final proceedings BibTeX before replacing this provisional citation.
